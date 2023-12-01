@@ -1,2 +1,2 @@
 # TrainACroqueta
- Un sistema para la gamificación del deporte.
+A system for the gamification of sport.
