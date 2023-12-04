@@ -65,3 +65,15 @@ def readGamedata(idUser : int):
 
    return returnValue
 
+def readGameProducers(idGame: int):
+   """
+   Create the sentence sql
+   """
+   global dbConnection
+   sql = "SELECT idProd, quantity FROM gameproducer where idGame = " + str(idGame) + " ;"
+   if (dbConnection != None):
+      returnValue = dbConnection.executeSqlRead(sql)
+   else:
+      returnValue = ReturnCodes.ERROR
+
+   return returnValue

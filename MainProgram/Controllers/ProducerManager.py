@@ -1,4 +1,5 @@
 from Models.Producer import Producer
+from Models.GameProducer import GameProducer
 from Controllers.DBManager import DBManager
 from Models.Constants import ReturnCodes
 
@@ -29,4 +30,45 @@ class ProducerManager:
             dbproducer = Producer(datid,datname,datqtt,datimg,datdrcp,datprice)
             listProducer.append(dbproducer)
          return listProducer
+      return returnValue 
+   
+   def getGameProducers(self,idGame : int):
+      """
+      Send the request to DBManager and get the result 
+      """
+      listgameProducer = []
+      result = self.dbmngr.getGameProducers(idGame)
+      if result == (ReturnCodes.ERROR):
+         returnValue = ReturnCodes.ERROR
+      else: 
+         for dat in result:
+            datidprod = dat[0]
+            datquantity = dat[1]
+            dbgameproducer = GameProducer(None,datidprod,datquantity)
+            listgameProducer.append(dbgameproducer)
+         return listgameProducer
+      return returnValue 
+   
+   def createGamedata(self,creategameproducer : GameProducer):
+      """
+      Send the idUser to create the gamedata
+      """
+      result = self.dbmngr.createGamedata(creategameproducer.idGame, creategameproducer.idProd)
+      if result == (ReturnCodes.ERROR):
+         returnValue = ReturnCodes.ERROR
+      elif result == (ReturnCodes.CREATED):
+         returnValue = ReturnCodes.CREATED
+         
+      return returnValue 
+   
+   def updateGamedata(self,creategameproducer : GameProducer):
+      """
+      Get the object Gamedata and send to DBManager
+      """
+      result = self.dbmngr.updateGamedata(creategameproducer.idGame, creategameproducer.idProd, creategameproducer.quantity)
+      if result == (ReturnCodes.ERROR):
+         returnValue = ReturnCodes.ERROR
+      elif result == (ReturnCodes.UPDATED_SUCCESS):
+         returnValue = ReturnCodes.UPDATED_SUCCESS
+         
       return returnValue 

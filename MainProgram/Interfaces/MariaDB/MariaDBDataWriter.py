@@ -62,7 +62,7 @@ def finishExercise(idExercise : int, qttCroquetas : int, duration: int ):
       returnValue = ReturnCodes.ERROR
    return returnValue
 
-def updateExercise(idGame : int, nCroquetas : int , lastday):
+def updateGamedata(idGame : int, nCroquetas : int , lastday):
    """
    Create the sentence sql
    """
@@ -80,6 +80,30 @@ def createGamedata(idUser : int):
    """
    global dbConnection
    sql = "INSERT INTO gamedata (idUser) VALUES ('"+ str(idUser)+"');"
+   if (dbConnection != None):
+      returnValue = dbConnection.executeSqlWrite(sql)
+   else:
+      returnValue = ReturnCodes.ERROR
+   return returnValue
+
+def createGameproducer(idGame : int, idProd :int):
+   """
+   Create the sentence sql
+   """
+   global dbConnection
+   sql = "INSERT INTO gameproducer (idGame,idProd) VALUES ('"+ str(idGame)+"','"+str(idProd)+"');"
+   if (dbConnection != None):
+      returnValue = dbConnection.executeSqlWrite(sql)
+   else:
+      returnValue = ReturnCodes.ERROR
+   return returnValue
+
+def updateGameproducer(idGame : int, idProd : int , quantity: int):
+   """
+   Create the sentence sql
+   """
+   global dbConnection
+   sql = "update gamedata set quanitity = '"+ str(quantity)+" where idGame = "+str(idGame)+" and idProd = "+str(idProd) +";"
    if (dbConnection != None):
       returnValue = dbConnection.executeSqlWrite(sql)
    else:

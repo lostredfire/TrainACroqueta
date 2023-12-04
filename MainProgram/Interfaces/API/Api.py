@@ -176,4 +176,57 @@ def updateGamedata():
     elif result == (ReturnCodes.UPDATED_SUCCESS):
         return 'Updated successfully',202
     
+@app.route('/api/getgameproducers' , methods=['GET'])
+def getGameproducers():
+    """
+    Get the list of the Producers of the game
+    """
+    try:
+        getidgame = request.get_json()
+    except:
+        return 'Bad request, unsupported media type',415
+    
+    result = app.apiMngr.getGameProducers(getidgame)
+    if result == (ReturnCodes.ERROR):
+        return 'Internal server error',500
+    else: 
+        response = json.dumps([prdgame.__dict__ for prdgame in result])
+        return response,202
 
+@app.route('/api/creategameproducer' , methods=['PUT'])
+def createGameproducer():
+    """
+    Create Producer's instance of the game.
+    """
+    try:
+        creategameproducer = request.get_json()
+    except:
+        return 'Bad request, unsupported media type',415
+    
+    result = app.apiMngr.createGameproducer(creategameproducer)
+    
+    if result == (ReturnCodes.ERROR):
+        return 'Internal server error',500
+    elif result == (ReturnCodes.MISSING_DATA):
+        return 'Missing data',404
+    elif result == (ReturnCodes.CREATED):
+        return 'Created successfully',202
+    
+@app.route('/api/updategameproducer' , methods=['PUT'])
+def updateGamedata():
+    """
+    Update Producer's instance of the game.
+    """
+    try:
+        savegameproducer = request.get_json()
+    except:
+        return 'Bad request, unsupported media type',415
+    
+    result = app.apiMngr.updateGameProducer(savegameproducer)
+    
+    if result == (ReturnCodes.ERROR):
+        return 'Internal server error',500
+    elif result == (ReturnCodes.MISSING_DATA):
+        return 'Missing data',404
+    elif result == (ReturnCodes.UPDATED_SUCCESS):
+        return 'Updated successfully',202

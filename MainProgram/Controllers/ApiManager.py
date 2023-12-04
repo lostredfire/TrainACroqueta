@@ -177,4 +177,49 @@ class ApiManager:
             returnValue = ReturnCodes.CREATED
       
       return returnValue   
-    
+   
+   def getGameProducers(self,idGamedict: dict):
+      """
+      Send the resquest to ProducerManager 
+      """
+      if ( len(idGamedict) == 1 ) and ( "idGame" in idGamedict ):
+         result = self.prdmngr.getGameProducers(idGamedict["idGame"])
+         if result == (ReturnCodes.ERROR):
+            returnValue = ReturnCodes.ERROR
+         else:
+            returnValue = result
+      else:
+         returnValue = ReturnCodes.MISSING_DATA
+      return returnValue   
+   
+   def createGameproducer(self, gameproducerDict : dict):
+      """
+      Check if the dict has the right keys and create the object Gameproducer with this values. 
+      """
+      if ( len(gameproducerDict) == 2 ) and ( "idGame" in gameproducerDict ) and ( "idProd" in gameproducerDict ):
+         creategameproducer = Gamedata(gameproducerDict["idGame"],gameproducerDict["idProd"])
+         result = self.prdmngr.createGameproducer(creategameproducer)
+         if result == (ReturnCodes.ERROR):
+            returnValue = ReturnCodes.ERROR
+         elif result == (ReturnCodes.CREATED):
+            returnValue = ReturnCodes.CREATED
+      else:
+         returnValue = ReturnCodes.MISSING_DATA
+
+      return returnValue
+
+   def updateGameproducer(self, gameproducerDict : dict):
+      """
+      Check if the dict has the right keys and create the object Gameproducer with this values. 
+      """
+      if ( len(gameproducerDict) == 3 ) and ( "idGame" in gameproducerDict ) and ( "idProd" in gameproducerDict ) and ( "quantity" in gameproducerDict ):
+         creategameproducer = Gamedata(gameproducerDict["idGame"],gameproducerDict["idProd"],gameproducerDict["quantity"])
+         result = self.prdmngr.updateGameproducer(creategameproducer)
+         if result == (ReturnCodes.ERROR):
+            returnValue = ReturnCodes.ERROR
+         elif result == (ReturnCodes.UPDATED_SUCCESS):
+            returnValue = ReturnCodes.UPDATED_SUCCESS
+      else:
+         returnValue = ReturnCodes.MISSING_DATA
+
+      return returnValue

@@ -118,7 +118,7 @@ class DBManager:
       """
       Send the object User to MariaDBDataWriter
       """ 
-      resultrow = MariaDBDataWriter.updateExercise(idGame, nCroquetas, lastday)
+      resultrow = MariaDBDataWriter.updateGamedata(idGame, nCroquetas, lastday)
       if(resultrow == 0):
          returnValue = ReturnCodes.ERROR
       elif(resultrow == 1):
@@ -139,3 +139,41 @@ class DBManager:
          returnValue= ReturnCodes.ERROR
 
       return returnValue 
+   
+   def getGameProducers(self, idGame: int):
+      """
+      Send the request to MariaDBReader
+      """ 
+      result = MariaDBDataReader.readGameProducers(idGame)
+      if((len(result)) == 0):
+         returnValue= ReturnCodes.ERROR
+      else:
+         returnValue = result
+         
+      return returnValue     
+   
+   def createGameproducer(self,idGame : int ,idProd : int):
+      """
+      Send the request to MariaDBDataWriter
+      """ 
+      result = MariaDBDataWriter.createGameproducer(idGame, idProd)
+      if(result >= 0):
+         returnValue = ReturnCodes.CREATED
+      else:
+         returnValue= ReturnCodes.ERROR
+
+      return returnValue 
+   
+   def updateExercise(self,idGame : int ,idProd : int, quantity: int):
+      """
+      Send the request to MariaDBDataWriter
+      """ 
+      resultrow = MariaDBDataWriter.updateGameproducer(idGame, idProd, quantity)
+      if(resultrow == 0):
+         returnValue = ReturnCodes.ERROR
+      elif(resultrow == 1):
+         returnValue = ReturnCodes.UPDATED_SUCCESS
+      else:
+         returnValue= ReturnCodes.ERROR
+
+      return returnValue
