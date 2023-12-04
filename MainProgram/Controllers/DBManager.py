@@ -164,7 +164,7 @@ class DBManager:
 
       return returnValue 
    
-   def updateExercise(self,idGame : int ,idProd : int, quantity: int):
+   def updateGameproducer(self,idGame : int ,idProd : int, quantity: int):
       """
       Send the request to MariaDBDataWriter
       """ 

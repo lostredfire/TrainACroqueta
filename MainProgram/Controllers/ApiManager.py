@@ -7,6 +7,7 @@ from Controllers.GameManager import GameManager
 from Models.User import User
 from Models.Exercise import Exercise
 from Models.GameData import Gamedata
+from Models.GameProducer import GameProducer
 from Models.Constants import ReturnCodes
 
 class ApiManager:
@@ -197,7 +198,7 @@ class ApiManager:
       Check if the dict has the right keys and create the object Gameproducer with this values. 
       """
       if ( len(gameproducerDict) == 2 ) and ( "idGame" in gameproducerDict ) and ( "idProd" in gameproducerDict ):
-         creategameproducer = Gamedata(gameproducerDict["idGame"],gameproducerDict["idProd"])
+         creategameproducer = GameProducer(gameproducerDict["idGame"],gameproducerDict["idProd"])
          result = self.prdmngr.createGameproducer(creategameproducer)
          if result == (ReturnCodes.ERROR):
             returnValue = ReturnCodes.ERROR
@@ -213,7 +214,7 @@ class ApiManager:
       Check if the dict has the right keys and create the object Gameproducer with this values. 
       """
       if ( len(gameproducerDict) == 3 ) and ( "idGame" in gameproducerDict ) and ( "idProd" in gameproducerDict ) and ( "quantity" in gameproducerDict ):
-         creategameproducer = Gamedata(gameproducerDict["idGame"],gameproducerDict["idProd"],gameproducerDict["quantity"])
+         creategameproducer = GameProducer(gameproducerDict["idGame"],gameproducerDict["idProd"],gameproducerDict["quantity"])
          result = self.prdmngr.updateGameproducer(creategameproducer)
          if result == (ReturnCodes.ERROR):
             returnValue = ReturnCodes.ERROR
