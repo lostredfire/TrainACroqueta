@@ -1,0 +1,64 @@
+import mysql.connector
+
+# Create a connection to the MySQL database
+connection = mysql.connector.connect(
+  host="localhost",
+  user="root",
+  password="",
+  database="trainacroquetadb"
+)
+
+# Create a cursor object
+cursor = connection.cursor()
+
+# Execute the query
+cursor.execute("SELECT * FROM users")
+
+# Fetch the results of the query
+results = cursor.fetchall()
+
+# Print the results
+for row in results:
+  print(row)
+
+# Close the cursor object
+cursor.close()
+
+# Close the connection to the MySQL database
+connection.close()
+# # MySQL connection
+# app.config['MYSQL_HOST'] = 'localhost'
+# app.config['MYSQL_USER'] = 'root'
+# app.config['MYSQL_PASSWORD'] = ''
+# app.config['MYSQL_DB'] = 'trainacroquetadb'
+
+# mysql= MySQL(app)
+
+
+# @app.route('/api/users', methods=['GET'])
+# def get_all_users():
+#     cur = mysql.connection.cursor()
+#     cur.execute('SELECT * FROM users')
+#     rv = cur.fetchall()
+#     return jsonify(rv)
+
+# @app.route('/api/users/<int:user_id>', methods=['GET'])
+# def get_one_user(user_id):
+#     cur = mysql.connection.cursor()
+#     cur.execute('SELECT * FROM users WHERE id=%s', (user_id,))
+#     rv = cur.fetchall()
+#     return jsonify(rv)
+
+# @app.route('/api/users', methods=['POST'])
+# def create_user():
+#     if not request.json or not 'name' in request.json:
+#         abort(400)
+#     cur = mysql.connection.cursor()
+#     cur.execute('INSERT INTO users (name) VALUES (%s)', (request.json['name'],))
+#     mysql.connection.commit()
+#     return jsonify({'message': 'User created successfully!'}), 201
+
+
+
+
+
