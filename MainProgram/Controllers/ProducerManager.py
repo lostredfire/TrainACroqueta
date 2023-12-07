@@ -49,11 +49,11 @@ class ProducerManager:
          return listgameProducer
       return returnValue 
    
-   def createGamedata(self,creategameproducer : GameProducer):
+   def createGameproducer(self,creategameproducer : GameProducer):
       """
-      Send the idUser to create the gamedata
+      Get the object Gameproducer and send to DBManager
       """
-      result = self.dbmngr.createGamedata(creategameproducer.idGame, creategameproducer.idProd)
+      result = self.dbmngr.createGameproducer(creategameproducer.idGame, creategameproducer.idProd)
       if result == (ReturnCodes.ERROR):
          returnValue = ReturnCodes.ERROR
       elif result == (ReturnCodes.CREATED):
@@ -61,11 +61,11 @@ class ProducerManager:
          
       return returnValue 
    
-   def updateGamedata(self,creategameproducer : GameProducer):
+   def updateGameproducer(self,creategameproducer : GameProducer):
       """
-      Get the object Gamedata and send to DBManager
+      Get the object Gameproducer and send to DBManager
       """
-      result = self.dbmngr.updateGamedata(creategameproducer.idGame, creategameproducer.idProd, creategameproducer.quantity)
+      result = self.dbmngr.updateGameproducer(creategameproducer.idGame, creategameproducer.idProd, creategameproducer.quantity)
       if result == (ReturnCodes.ERROR):
          returnValue = ReturnCodes.ERROR
       elif result == (ReturnCodes.UPDATED_SUCCESS):

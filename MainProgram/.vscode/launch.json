@@ -9,7 +9,7 @@
             "name": "Debug MainProgram",
             "type": "python",
             "request": "launch",
-            "cwd": "/workspace/trainacroqueta/MainProgram/",
+            "cwd": "/workspace/TrainACroqueta/MainProgram/",
             "program": "main.py",
             "console": "integratedTerminal",
             "justMyCode": true,

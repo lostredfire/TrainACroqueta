@@ -103,7 +103,7 @@ def updateGameproducer(idGame : int, idProd : int , quantity: int):
    Create the sentence sql
    """
    global dbConnection
-   sql = "update gamedata set quanitity = '"+ str(quantity)+" where idGame = "+str(idGame)+" and idProd = "+str(idProd) +";"
+   sql = "update gameproducer set quantity = "+ str(quantity)+" where idGame = "+str(idGame)+" and idProd = "+str(idProd) +";"
    if (dbConnection != None):
       returnValue = dbConnection.executeSqlWrite(sql)
    else:

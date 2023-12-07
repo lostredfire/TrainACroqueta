@@ -213,7 +213,7 @@ def createGameproducer():
         return 'Created successfully',202
     
 @app.route('/api/updategameproducer' , methods=['PUT'])
-def updateGamedata():
+def updateGameproducer():
     """
     Update Producer's instance of the game.
     """
@@ -222,7 +222,7 @@ def updateGamedata():
     except:
         return 'Bad request, unsupported media type',415
     
-    result = app.apiMngr.updateGameProducer(savegameproducer)
+    result = app.apiMngr.updateGameproducer(savegameproducer)
     
     if result == (ReturnCodes.ERROR):
         return 'Internal server error',500
