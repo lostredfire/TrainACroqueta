@@ -35,15 +35,19 @@ public class GameManager : MonoBehaviour
     void Awake() {
 
         DontDestroyOnLoad(gameObject); //falla porque cuando se destruye la escena, otros elementos tambien se destruyen y este game manager sigue intentando acceder a ellos.
+        //hacer la peticion a la api de la lista de tipos de productores
 
     }
 
     void Start() {
 
+        //mostrar spinner mientras se recibe la lista de productores y el gameData de la api.
+        //la escena se deshabilita para que el usuario no pueda hacer nada hasta que se termine de recibir toda la info de la api.
         _producerManager = new ProducerManager();
+
         _nMilisSinceLastUpdate = 0;
-        _nTotalCroquetas = 0;
-        _producersPanelsControllers = new ProducerPanelController[GameGlobals.PRODUCER_TYPES.Length];
+        _nTotalCroquetas = 0; //obtener el numero de croquetas del GameData de la api.
+        _producersPanelsControllers = new ProducerPanelController[GameGlobals.PRODUCER_TYPES.Length]; //mover esto y el for de despues al nuevo metodo.
 
         for (int i = 0; i < GameGlobals.PRODUCER_TYPES.Length; i++) {
             GameObject producerPanel = Instantiate(panelProducerPrefabGO, contentTiendaGO.transform);
@@ -56,6 +60,14 @@ public class GameManager : MonoBehaviour
         _continueUpdating = true;
 
     }
+
+    //nuevo metodo que se ejecutara cuando se reciba la lista de tipos de productores.
+    //en este metodo se inicializan los _producersPanelsControllers.
+    //este nuevo metodo, hara la peticion del gameData
+
+    //nuevo metodo que se ejecutara cuando se reciba el gameData
+    //este metodo terminara de inicializar todo lo que falte de la escena.
+    //cuando este todo inicializado, eliminara el spinner de la interfaz y dejara que el usuario use la app.
 
     void FixedUpdate() {
 

@@ -1453,6 +1453,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxBonusQtty: 5
   producerPriceIncrement: 1.1
+  loose_by_sell_productor: 0
   cursorsRotationSpeed: 0.075
   maxCursors: 160
   nCircCursors: 4
@@ -1502,7 +1503,7 @@ MonoBehaviour:
   panelListaProductoresGO: {fileID: 2077411338}
   panelListaBonusGO: {fileID: 1073756762}
   panelBSQttyGO: {fileID: 567868152}
-  panelSettingsPrefabGO: {fileID: 4360885235261963106, guid: 8f6b2f1f2056e854eb47f9f0a0f26ff6, type: 3}
+  panelSettingsPrefabGO: {fileID: 4360885235261963106, guid: 30229e321ece97e4c920c116443e373e, type: 3}
   panelMainRT: {fileID: 1344832163}
   cursorsPanelController: {fileID: 1505609537}
   croquetaAnimator: {fileID: 408479191}

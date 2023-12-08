@@ -27,7 +27,11 @@ public class MainMenuManager : MonoBehaviour
           SceneManager.LoadScene("Game");
 
      }
-   
+    public void startLogin(){
+
+          SceneManager.LoadScene("Game");
+
+     }
      public void showLogin(){
 
           SceneManager.LoadScene("LoginSignup");
