@@ -65,7 +65,7 @@ public class GameManager : MonoBehaviour
     //en este metodo se inicializan los _producersPanelsControllers.
     //este nuevo metodo, hara la peticion del gameData
 
-    //nuevo metodo que se ejecutara cuando se reciba el gameData
+    //nuevo metodo que se ejecutara cuando se reciba el gameData y el gameProducers
     //este metodo terminara de inicializar todo lo que falte de la escena.
     //cuando este todo inicializado, eliminara el spinner de la interfaz y dejara que el usuario use la app.
 
@@ -81,6 +81,13 @@ public class GameManager : MonoBehaviour
         } else {
             _nMilisSinceLastUpdate += (int) (Time.fixedDeltaTime * 1000);
         }
+
+        //if (_nSecondsSinceLastSave >= GameGlobals.SAVE_EVERY_N_SECONDS) {
+        //    _nSecondsSinceLastSave = 0;
+        //    saveGameData(); //updategameproducer y updategamedata
+        //} else {
+        //    _nSecondsSinceLastSave += Time.fixedDeltaTime;
+        //}
 
     }
 
@@ -131,7 +138,7 @@ public class GameManager : MonoBehaviour
 
     private void updateInfoPanel() {
 
-        _nTotalCroquetas += _producerManager.caculateProduced();
+        _nTotalCroquetas += _producerManager.calculateProduced();
         nCroquetasTextComponent.text = _nTotalCroquetas.ToString() + " Croquetas";
         nCroquetasPerSecondTextComponent.text = _producerManager.calculateProduction().ToString() + " CPS";
 
@@ -176,9 +183,9 @@ public class GameManager : MonoBehaviour
     public void sellProducer(int producerIndex) {
 
         if (_qttyBuySell == -1) {
-            _nTotalCroquetas = _nTotalCroquetas + _producerManager.sellProducer(producerIndex, _producerManager.calculateMaxProducersToSell(producerIndex));
+            _nTotalCroquetas += _producerManager.sellProducer(producerIndex, _producerManager.calculateMaxProducersToSell(producerIndex));
         } else {
-            _nTotalCroquetas = _nTotalCroquetas + _producerManager.sellProducer(producerIndex, _qttyBuySell);
+            _nTotalCroquetas += _producerManager.sellProducer(producerIndex, _qttyBuySell);
         }
 
         updateProducerPnlInfo(producerIndex);
