@@ -57,7 +57,7 @@ def readGamedata(idUser : int):
    Create the sentence sql
    """
    global dbConnection
-   sql = "select idGame,nCroquetas,lastDay from gamedata where idUser = '" + str(idUser) + "';"
+   sql = "select idGame,nCroquetas,lastDay from gamedata where idUser = " + str(idUser) + ";"
    if (dbConnection != None):
       returnValue = dbConnection.executeSqlRead(sql)
    else:
@@ -65,15 +65,20 @@ def readGamedata(idUser : int):
 
    return returnValue
 
-def readGameProducers(idGame: int):
+def readGameProducers(idGame: int, idProd: int = None):
    """
    Create the sentence sql
    """
    global dbConnection
-   sql = "SELECT idProd, quantity FROM gameproducer where idGame = " + str(idGame) + " ;"
+   if (idProd != None):
+      sql = "SELECT quantity FROM gameproducer where idGame = " + str(idGame) + " and idProd = "+ str(idProd) +";"
+   else: 
+      sql = "SELECT idProd, quantity FROM gameproducer where idGame = " + str(idGame) + " ;"
+  
    if (dbConnection != None):
       returnValue = dbConnection.executeSqlRead(sql)
    else:
       returnValue = ReturnCodes.ERROR
 
    return returnValue
+

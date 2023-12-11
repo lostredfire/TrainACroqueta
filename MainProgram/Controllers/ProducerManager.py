@@ -46,19 +46,7 @@ class ProducerManager:
             datquantity = dat[1]
             dbgameproducer = GameProducer(None,datidprod,datquantity)
             listgameProducer.append(dbgameproducer)
-         return listgameProducer
-      return returnValue 
-   
-   def createGameproducer(self,creategameproducer : GameProducer):
-      """
-      Get the object Gameproducer and send to DBManager
-      """
-      result = self.dbmngr.createGameproducer(creategameproducer.idGame, creategameproducer.idProd)
-      if result == (ReturnCodes.ERROR):
-         returnValue = ReturnCodes.ERROR
-      elif result == (ReturnCodes.CREATED):
-         returnValue = ReturnCodes.CREATED
-         
+         return listgameProducer.__dict__
       return returnValue 
    
    def updateGameproducer(self,creategameproducer : GameProducer):

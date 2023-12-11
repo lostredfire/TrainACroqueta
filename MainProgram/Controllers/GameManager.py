@@ -1,14 +1,17 @@
 from Models.GameData import Gamedata
 from Controllers.DBManager import DBManager
+from Controllers.ProducerManager import ProducerManager
 from Models.Constants import ReturnCodes
 
 class GameManager:
 
    dbmngr = None
+   prdmngr = None
 
-   def __init__(self,dbmanager: DBManager ):
+   def __init__(self,dbmanager: DBManager, prdmngr : ProducerManager):
       print("--------- Game Manager initializing...")
       self.dbmngr = dbmanager
+      self.prdmngr = prdmngr
 
    def getGamedata(self, idUser : int):
       """
@@ -21,8 +24,9 @@ class GameManager:
          for dat in result:
             datidgame = dat[0]
             datncroquetas = dat[1]
-            datlastday = dat[2]
+            datlastday = str(dat[2])
             dbgame = Gamedata(datidgame,None,datncroquetas,datlastday)
+            dbgame.gameproducer = self.prdmngr.getGameProducers(dat[0])
          return dbgame
       
       return returnValue 
