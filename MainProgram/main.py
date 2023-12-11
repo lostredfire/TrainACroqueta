@@ -20,7 +20,7 @@ def main():
     usrMngr = UserManager(dbMngr)
     exMngr = ExerciseManager(dbMngr)
     prdMngr = ProducerManager(dbMngr)
-    gameMngr = GameManager(dbMngr)
+    gameMngr = GameManager(dbMngr,prdMngr)
     rewMngr = RewardsManager()
     rankMngr = RankingManager()
     apiMngr = ApiManager(usrMngr,exMngr,prdMngr,gameMngr)

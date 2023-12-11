@@ -56,7 +56,7 @@ http://trainacroqueta.ignorelist.com:1109/api/updateexercise	[PUT]
 http://trainacroqueta.ignorelist.com:1109/api/getproducers
 
 
-7. getgamedata(idUser) --> idGame,nCroquetas,lastday
+7. getgamedata(idUser) --> idGame,nCroquetas,lastday,gameproducers [Objectlist(idProd,quantity)]
 
 http://trainacroqueta.ignorelist.com:1109/api/getgamedata	[GET]
 
@@ -65,43 +65,25 @@ http://trainacroqueta.ignorelist.com:1109/api/getgamedata	[GET]
 }
 
 
-8. updategamedata(idGame, nCroquetas, lastday) --> Null
+8. updategamedata(idGame, nCroquetas, lastday, gameproducers(idGame,idProd,quantity) ) --> Null
 
 http://trainacroqueta.ignorelist.com:1109/api/updategamedata	[PUT]
 
 {
     "idGame": 1,
     "nCroquetas": 300,
-    "lastday": "2023-12-03"
+    "lastday": "2023-12-03",
+    "gameproducers": 
+        {
+            "idGame" : 1,
+            "idProd": 1,
+            "quantity": 30	
+        },
+        {
+            "idGame" : 1,
+            "idProd": 2,
+            "quantity": 30	
+        }   
 }
 
-
-9. getgameproducers(idGame) --> Object list (idProd, quantity) 
-
-http://trainacroqueta.ignorelist.com:1109/api/getgameproducers	[GET]
-
-{
-    "idGame" : 1
-}
-
-
-10. creategameproducer (idGame,idProd) --> Null
-
-http://trainacroqueta.ignorelist.com:1109/api/creategameproducer	[PUT]
-
-{
-    "idGame" : 1,
-    "idProd": 1
-}
-
-
-11. updategameproducer(idGame,idProd,quantity) --> Null
-
-http://trainacroqueta.ignorelist.com:1109/api/updategameproducer	[PUT]
-
-{
-    "idGame" : 1,
-    "idProd": 1,
-    "quantity": 30	
-}
 
