@@ -44,7 +44,7 @@ def login():
         return 'Wrong password',406
     else:
         response = json.dumps(result)
-        return response,202
+        return response,200
 
 
 @app.route('/api/signup', methods=['PUT'])
@@ -67,7 +67,7 @@ def createUser():
         return 'Missing data',404
     else:
         response = json.dumps(result)
-        return response,202  
+        return response,200  
 
 @app.route('/api/newexercise' , methods=['PUT'])
 def newExercise():
@@ -87,7 +87,7 @@ def newExercise():
         return 'Missing data',404
     else:
         response = json.dumps(result)
-        return response,202
+        return response,200
 
 @app.route('/api/updateexercise' , methods=['PUT'])
 def updateExercise():
@@ -106,7 +106,7 @@ def updateExercise():
     elif result == (ReturnCodes.MISSING_DATA):
         return 'Missing data',404
     elif result == (ReturnCodes.UPDATED_SUCCESS):
-        return 'Updated successfully',202
+        return 'Updated successfully',200
     
 
 @app.route('/api/finishexercise' , methods=['PUT'])
@@ -126,7 +126,7 @@ def finishExercise():
     elif result == (ReturnCodes.MISSING_DATA):
         return 'Missing data',404
     elif result == (ReturnCodes.UPDATED_SUCCESS):
-        return 'Updated successfully',202
+        return 'Updated successfully',200
     
 @app.route('/api/getproducers' , methods=['GET'])
 def getProducers():
@@ -138,7 +138,7 @@ def getProducers():
         return 'Internal server error',500
     else: 
         response = json.dumps([prd.__dict__ for prd in result])
-        return response,202
+        return response,200
 
 @app.route('/api/getgamedata' , methods=['GET'])
 def getGamedata():
@@ -155,7 +155,7 @@ def getGamedata():
         return 'Internal server error',500
     else:
         response = json.dumps(result)
-        return response,202
+        return response,200
 
 @app.route('/api/updategamedata' , methods=['PUT'])
 def updateGamedata():
@@ -174,5 +174,5 @@ def updateGamedata():
     elif result == (ReturnCodes.MISSING_DATA):
         return 'Missing data',404
     elif result == (ReturnCodes.UPDATED_SUCCESS):
-        return 'Updated successfully',202
+        return 'Updated successfully',200
 
