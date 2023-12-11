@@ -73,7 +73,7 @@ http://trainacroqueta.ignorelist.com:1109/api/updategamedata	[PUT]
     "idGame": 1,
     "nCroquetas": 300,
     "lastday": "2023-12-03",
-    "gameproducers": 
+    "gameproducers": [
         {
             "idGame" : 1,
             "idProd": 1,
@@ -83,7 +83,6 @@ http://trainacroqueta.ignorelist.com:1109/api/updategamedata	[PUT]
             "idGame" : 1,
             "idProd": 2,
             "quantity": 30	
-        }   
+        }   ]
 }
-
 

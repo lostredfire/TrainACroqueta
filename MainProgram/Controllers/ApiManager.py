@@ -155,9 +155,10 @@ class ApiManager:
       """
       Check if the dict has the right keys and create the object Gamedata with this values. 
       """
-      if ( len(gamedataDict) == 3 ) and ( "idGame" in gamedataDict ) and ( "nCroquetas" in gamedataDict ) and ( "lastday" in gamedataDict ):
+      if ( len(gamedataDict) == 4 ) and ( "idGame" in gamedataDict ) and ( "nCroquetas" in gamedataDict ) and ( "lastday" in gamedataDict ) and ("gameproducers" in gamedataDict):
          uptgamedata = Gamedata(gamedataDict["idGame"],None,gamedataDict["nCroquetas"],gamedataDict["lastday"])
          result = self.gmmngr.updateGamedata(uptgamedata)
+         result = self.prdmngr.updateGameproducer(gamedataDict["gameproducers"])
          if result == (ReturnCodes.ERROR):
             returnValue = ReturnCodes.ERROR
          elif result == (ReturnCodes.UPDATED_SUCCESS):

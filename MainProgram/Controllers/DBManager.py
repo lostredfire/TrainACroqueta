@@ -24,7 +24,7 @@ class DBManager:
       """   
       result = MariaDBDataReader.readUserPass(username)
       if((len(result)) == 0):
-         returnValue = "Not user"
+         returnValue = ReturnCodes.NOT_USER
       elif((len(result)) == 1):
          returnValue = result
       else:

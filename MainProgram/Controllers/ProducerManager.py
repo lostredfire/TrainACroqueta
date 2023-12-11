@@ -45,15 +45,18 @@ class ProducerManager:
             datidprod = dat[0]
             datquantity = dat[1]
             dbgameproducer = GameProducer(None,datidprod,datquantity)
-            listgameProducer.append(dbgameproducer)
-         return listgameProducer.__dict__
+            listgameProducer.append(dbgameproducer.__dict__)
+         return listgameProducer
       return returnValue 
    
-   def updateGameproducer(self,creategameproducer : GameProducer):
+   def updateGameproducer(self,listgameproducer):
       """
       Get the object Gameproducer and send to DBManager
       """
-      result = self.dbmngr.updateGameproducer(creategameproducer.idGame, creategameproducer.idProd, creategameproducer.quantity)
+      for dat in listgameproducer:
+            datgameproducer = GameProducer(dat['idGame'],dat['idProd'],dat['quantity'])
+            result = self.dbmngr.updateGameproducer(datgameproducer.idGame, datgameproducer.idProd, datgameproducer.quantity)
+      
       if result == (ReturnCodes.ERROR):
          returnValue = ReturnCodes.ERROR
       elif result == (ReturnCodes.UPDATED_SUCCESS):
