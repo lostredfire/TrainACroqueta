@@ -243,6 +243,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   panelSettingsPrefabGO: {fileID: 4360885235261963106, guid: 30229e321ece97e4c920c116443e373e, type: 3}
+  panelLoginPrefabGO: {fileID: 4360885235261963106, guid: e2c310c1c507aeb4fa5a39c42160775a, type: 3}
 --- !u!1 &357115366
 GameObject:
   m_ObjectHideFlags: 0
@@ -1162,7 +1163,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 223715263}
         m_TargetAssemblyTypeName: MainMenuManager, Assembly-CSharp
-        m_MethodName: startLogin
+        m_MethodName: openLogin
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

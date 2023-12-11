@@ -1,18 +1,32 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
 
-public class API : MonoBehaviour
+public class API
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+
+    private static readonly string baseUrl = "http://trainacroqueta.ignorelist.com:1109/api/";
+    //private static readonly string baseUrl = "http://192.168.1.22:1109/api/";
+    private static readonly HttpClient _client = new HttpClient();
+    public delegate void msgReceivedCallback(string jsonStr);
+
+    public API() {
+
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public async void sendPostToApi(string apiResource, string jsonstr, msgReceivedCallback callback) {
+
+        HttpResponseMessage resp = await _client.PostAsync(baseUrl + apiResource, new StringContent(content: jsonstr, Encoding.UTF8, "application/json"));
+        string respStr = await resp.Content.ReadAsStringAsync();
+        callback(respStr);
+        return;
+
     }
+
+    public void sendGetJsonToApi(string apiResource, string jsonstr) {
+
+        
+
+    }
+
 }

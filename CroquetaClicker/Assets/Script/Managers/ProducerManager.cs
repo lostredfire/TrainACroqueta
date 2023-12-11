@@ -53,7 +53,7 @@ public class ProducerManager {
     /// Calculates the number of Croquetas produced by all the producers in the list since the last global time stamp.
     /// </summary>
     /// <returns> The number of Croquetas produced by all the producers in the list since the last global time stamp. </returns>
-    public long caculateProduced() {
+    public long calculateProduced() {
 
         long deltaTime = DateTimeOffset.Now.ToUnixTimeSeconds() - _globalTimeStamp.timeStamp;
         _globalTimeStamp.updateTS();

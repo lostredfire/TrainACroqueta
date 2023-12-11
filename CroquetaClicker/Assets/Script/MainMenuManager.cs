@@ -13,6 +13,7 @@ public class MainMenuManager : MonoBehaviour
 {
 
      public GameObject panelSettingsPrefabGO;
+     public GameObject panelLoginPrefabGO;
 
      public void Start() {
           FileInfo fileSettings = new FileInfo(Application.persistentDataPath + "/Settings/settings.dat");
@@ -27,11 +28,7 @@ public class MainMenuManager : MonoBehaviour
           SceneManager.LoadScene("Game");
 
      }
-    public void startLogin(){
 
-          SceneManager.LoadScene("Game");
-
-     }
      public void showLogin(){
 
           SceneManager.LoadScene("LoginSignup");
@@ -53,4 +50,11 @@ public class MainMenuManager : MonoBehaviour
           GameObject settings = Instantiate(panelSettingsPrefabGO, gameObject.transform);
 
      }
+
+     public void openLogin() {
+
+          GameObject loginPnl = Instantiate(panelLoginPrefabGO, gameObject.transform);
+
+     }
+
 }
