@@ -7,6 +7,9 @@ public class UserManager
     private static UserManager _instance;
     private bool _isUserSignedIn;
     private User _userSignedIn;
+    public delegate void showLoginResult(int respCode);
+    private showLoginResult showResCallback;
+
     private UserManager() {
 
         if (_instance == null) {
@@ -17,21 +20,34 @@ public class UserManager
 
     }
 
-    public void loginUser(User u) {
+    public void loginUser(User u, showLoginResult showResultCallback) {
 
+        this.showResCallback = showResultCallback;
         ApiManager.instance.sendLogin(u, processLoginResult);
 
     }
 
-    public void processLoginResult(string loginResultJson) {
-        Debug.Log(loginResultJson);
-        // if result ok -> setUserSignedIn
-        // else show login wrong
+    public void processLoginResult(int respCode, string loginResultJson) {
+
+        User u = null;
+        if (respCode == 200) {
+            u = new User(loginResultJson);
+        } 
+        setUserSignedIn(u);
+        this.showResCallback(respCode);
+
     }
 
     public void setUserSignedIn(User u) {
         _isUserSignedIn = true;
         _userSignedIn = u;
+        MainMenuManager.instance.notifyUserLogged(u);
+    }
+
+    public void logout() {
+        _isUserSignedIn = false;
+        _userSignedIn = null;
+        MainMenuManager.instance.notifyUserLogged(null);
     }
 
     public static UserManager instance {

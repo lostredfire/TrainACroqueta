@@ -1,68 +1,49 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
-
+[System.Serializable]
 public class User {
-    private int _idUser;
-    private string _username;
-    private string _passwd;
-    private string _fullName;
-    private string _email;
+    public int idUser;
+    public string username;
+    public string passwd;
+    public string fullName;
+    public string email;
     //public Image profileImg;
 
     public User(int idUser, string username, string passwd, string fullName, string email) {
-        _idUser = idUser;
-        _username = username;
-        _passwd = passwd;
-        _fullName = fullName;
-        _email = email;
-        //profileImg = other.profileImg;
+        this.idUser = idUser;
+        this.username = username;
+        this.passwd = passwd;
+        this.fullName = fullName;
+        this.email = email;
+        //this.profileImg = profileImg;
     }
 
     public User(string username, string passwd) {
-        _username = username;
-        _passwd = passwd;
+        this.username = username;
+        this.passwd = passwd;
     }
 
     public User(string jsonStr) {
-        
+        User aux = JsonUtility.FromJson<User>(jsonStr);
+        idUser = aux.idUser;
+        username = aux.username;
+        passwd = aux.passwd;
+        fullName = aux.fullName;
+        email = aux.email;
     }
 
     public string toJsonStr(bool onlyLoginData) {
 
-        string jsonstr = "{";
-        //if (!onlyLoginData) jsonstr += "\"idUser\":\"" + _idUser + "\",\n"; 
-        jsonstr += "\"username\":\"" + _username + "\",\n";
-        jsonstr += "\"passwd\":\"" + _passwd + "\"" + (onlyLoginData ? "\n": ",\n");
-        if (!onlyLoginData) jsonstr += "\"fullname\":\"" + _fullName + "\",\n";
-        if (!onlyLoginData) jsonstr += "\"email\":\"" + _email + "\",\n";
+        string jsonstr = "{\n";
+        jsonstr += "\"username\":\"" + username + "\",\n";
+        jsonstr += "\"passwd\":\"" + passwd + "\"" + (onlyLoginData ? "\n": ",\n");
+        if (!onlyLoginData) jsonstr += "\"fullname\":\"" + fullName + "\",\n";
+        if (!onlyLoginData) jsonstr += "\"email\":\"" + email + "\",\n";
         jsonstr += "}";
         return jsonstr;
 
-    }
-
-    public int idUser {
-        get {
-            return _idUser;
-        }
-    }
-
-    public string username {
-        get {
-            return _username;
-        }
-    }
-
-    public string fullName {
-        get {
-            return _fullName;
-        }
-    }
-
-    public string email {
-        get {
-            return _email;
-        }
     }
 
 }
