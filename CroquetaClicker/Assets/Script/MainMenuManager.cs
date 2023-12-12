@@ -8,12 +8,25 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MainMenuManager : MonoBehaviour
 {
 
+     private static MainMenuManager _instance;
      public GameObject panelSettingsPrefabGO;
      public GameObject panelLoginPrefabGO;
+     public GameObject imgTitle;
+     public Button btnStartGame;
+     public TMPro.TextMeshProUGUI txtUserLbl;
+
+     public void Awake() {
+          if (_instance == null) {
+               _instance = this;
+          } else {
+               Destroy(this.gameObject);
+          }
+     }
 
      public void Start() {
           FileInfo fileSettings = new FileInfo(Application.persistentDataPath + "/Settings/settings.dat");
@@ -23,15 +36,21 @@ public class MainMenuManager : MonoBehaviour
           }
      }
 
-     public void startGame(){
+     public void notifyUserLogged(User u) {
 
-          SceneManager.LoadScene("Game");
+          if (u != null) {
+               btnStartGame.interactable = true;
+               txtUserLbl.text = u.username;
+          } else {
+               btnStartGame.interactable = false;
+               txtUserLbl.text = "-";
+          }
 
      }
 
-     public void showLogin(){
+     public void startGame(){
 
-          SceneManager.LoadScene("LoginSignup");
+          SceneManager.LoadScene("Game");
 
      }
 
@@ -51,10 +70,24 @@ public class MainMenuManager : MonoBehaviour
 
      }
 
+     public void toogleImgTitle() {
+          imgTitle.SetActive(!imgTitle.activeSelf);
+     }
+
      public void openLogin() {
 
-          GameObject loginPnl = Instantiate(panelLoginPrefabGO, gameObject.transform);
+          toogleImgTitle();
+          if (UserManager.instance.isUserSignedIn) {
+               UserManager.instance.logout();
+          }
+          GameObject pnlLogin = Instantiate(panelLoginPrefabGO, gameObject.transform);
 
+     }
+
+     public static MainMenuManager instance {
+          get {
+               return _instance;
+          }
      }
 
 }
