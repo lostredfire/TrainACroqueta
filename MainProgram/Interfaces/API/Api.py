@@ -42,6 +42,8 @@ def login():
         return 'Not user',404
     elif result == (ReturnCodes.WRONG_PSSWD):
         return 'Wrong password',406
+    elif result == (ReturnCodes.MISSING_DATA):
+        return 'Missing data',404
     else:
         response = json.dumps(result)
         return response,200
@@ -153,6 +155,8 @@ def getGamedata():
     result = app.apiMngr.getGamedata(idgame)
     if result == (ReturnCodes.ERROR):
         return 'Internal server error',500
+    elif result == (ReturnCodes.MISSING_DATA):
+        return 'Missing data',404
     else:
         response = json.dumps(result)
         return response,200

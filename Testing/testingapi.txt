@@ -9,6 +9,13 @@ http://trainacroqueta.ignorelist.com:1109/api/login	[POST]
     "passwd":"silviarc"
 }
 
+Return Codes:
+    [200] -> Accepted 
+    [404] -> Not Found Not user / Missing Data
+    [406] -> Not Acceptable Wrong password
+    [500] -> Internal server error
+    [415] -> Unsopported media type
+
 
 2. singup(username,passwd,fullname,email,profileimg) --> idUser
 
@@ -21,6 +28,12 @@ http://trainacroqueta.ignorelist.com:1109/api/signup	[PUT]
     "email": "isthetestinguser@gmail.com"
 }
 
+Return Codes:
+    [200] -> Accepted 
+    [404] -> Not Found User already exists / Missing Data
+    [500] -> Internal server error
+    [415] -> Unsopported media type
+
 
 3. newexercise(idGame,dateTime) --> idExercise
 
@@ -31,6 +44,11 @@ http://trainacroqueta.ignorelist.com:1109/api/newexercise	[PUT]
     "dateTime":"2020-03-09"
 }
 
+Return Codes:
+    [200] -> Accepted 
+    [404] -> Not Found Missing Data
+    [500] -> Internal server error
+    [415] -> Unsopported media type
 
 4. updateexercise(qttCroquetas,idExercise) --> Null
 
@@ -41,6 +59,11 @@ http://trainacroqueta.ignorelist.com:1109/api/updateexercise	[PUT]
     "qttCroquetas":30
 }
 
+Return Codes:
+    [200] -> Accepted Updated successfully
+    [404] -> Not Found Missing Data
+    [500] -> Internal server error
+    [415] -> Unsopported media type
 
 5. finishexercice(idExercise,qttCroquetas,duration) --> Null
 
@@ -50,11 +73,20 @@ http://trainacroqueta.ignorelist.com:1109/api/updateexercise	[PUT]
     "duration": 80
 }
 
+Return Codes:
+    [200] -> Accepted Updated successfully
+    [404] -> Not Found Missing Data
+    [500] -> Internal server error
+    [415] -> Unsopported media type
 
 6. getproducers() --> Object list (idProd,prodName,prodQuantity,img,description,price)
 
 http://trainacroqueta.ignorelist.com:1109/api/getproducers
 
+Return Codes:
+    [200] -> Accepted 
+    [500] -> Internal server error
+    [415] -> Unsopported media type
 
 7. getgamedata(idUser) --> idGame,nCroquetas,lastday,gameproducers [Objectlist(idProd,quantity)]
 
@@ -63,6 +95,12 @@ http://trainacroqueta.ignorelist.com:1109/api/getgamedata	[GET]
 {
     "idUser": 2
 }
+
+Return Codes:
+    [200] -> Accepted 
+    [404] -> Not Found Missing Data
+    [500] -> Internal server error
+    [415] -> Unsopported media type
 
 
 8. updategamedata(idGame, nCroquetas, lastday, gameproducers(idGame,idProd,quantity) ) --> Null
@@ -86,3 +124,8 @@ http://trainacroqueta.ignorelist.com:1109/api/updategamedata	[PUT]
         }   ]
 }
 
+Return Codes:
+    [200] -> Accepted 
+    [404] -> Not Found Missing Data
+    [500] -> Internal server error
+    [415] -> Unsopported media type
