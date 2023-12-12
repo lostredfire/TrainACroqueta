@@ -82,3 +82,15 @@ def readGameProducers(idGame: int, idProd: int = None):
 
    return returnValue
 
+def readRanking():
+   """
+   Create the sentence sql
+   """
+   global dbConnection
+   sql = "select usr.userName, gd.nCroquetas from gamedata as gd inner join users as usr on usr.idUser = gd.idUser order by gd.nCroquetas DESC;"
+   if (dbConnection != None):
+      returnValue = dbConnection.executeSqlRead(sql)
+   else:
+      returnValue = ReturnCodes.ERROR
+
+   return returnValue

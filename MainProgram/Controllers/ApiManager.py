@@ -3,6 +3,7 @@ from Controllers.UserManager import UserManager
 from Controllers.ExerciseManager import ExerciseManager
 from Controllers.ProducerManager import ProducerManager
 from Controllers.GameManager import GameManager
+from Controllers.RankingManager import RankingManager
 
 from Models.User import User
 from Models.Exercise import Exercise
@@ -10,16 +11,18 @@ from Models.GameData import Gamedata
 from Models.GameProducer import GameProducer
 from Models.Constants import ReturnCodes
 
+
 class ApiManager:
 
    usrmngr = None
    excmngr = None
    prdmngr = None
    gamemngr = None    
+   rnkmngr = None
 
-   def __init__(self, usermanager: UserManager, exercisemanager: ExerciseManager, producermanager: ProducerManager, gamemanager : GameManager):
+   def __init__(self, usermanager: UserManager, exercisemanager: ExerciseManager, producermanager: ProducerManager, gamemanager : GameManager, rankingmanager : RankingManager):
       """
-      Inicialize ApiManager, inicialize API and get UserManager
+      Inicialize API and managers
       """
       print("--------- API Manager initializing...")
       # Initialize the API Server
@@ -27,6 +30,7 @@ class ApiManager:
       self.excmngr = exercisemanager
       self.prdmngr = producermanager
       self.gmmngr = gamemanager
+      self.rnkmngr = rankingmanager
       Api.init(self)
 
    def login(self, userDict : dict):
@@ -179,4 +183,16 @@ class ApiManager:
             returnValue = ReturnCodes.CREATED
       
       return returnValue   
+   
+   def getRanking(self):
+      """
+      Send the resquest to RankingManager
+      """
+      result = self.rnkmngr.getRanking()
+      if result == (ReturnCodes.ERROR):
+         returnValue = ReturnCodes.ERROR
+      else:
+         returnValue = result
+
+      return returnValue  
    

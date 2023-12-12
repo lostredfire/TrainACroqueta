@@ -21,9 +21,9 @@ def main():
     exMngr = ExerciseManager(dbMngr)
     prdMngr = ProducerManager(dbMngr)
     gameMngr = GameManager(dbMngr,prdMngr)
+    rankMngr = RankingManager(dbMngr) 
     rewMngr = RewardsManager()
-    rankMngr = RankingManager()
-    apiMngr = ApiManager(usrMngr,exMngr,prdMngr,gameMngr)
+    apiMngr = ApiManager(usrMngr,exMngr,prdMngr,gameMngr,rankMngr)
     
 if __name__ == "__main__":
     main()  

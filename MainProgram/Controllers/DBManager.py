@@ -171,3 +171,17 @@ class DBManager:
             returnValue= ReturnCodes.ERROR
 
       return returnValue
+   
+   def getRanking(self):
+      """
+      Send the request to MariaDBReader
+      """ 
+      result = MariaDBDataReader.readRanking()
+      if((len(result)) == 0):
+         returnValue= ReturnCodes.ERROR
+      else:
+         returnValue = result
+         
+      return returnValue   
+   
+

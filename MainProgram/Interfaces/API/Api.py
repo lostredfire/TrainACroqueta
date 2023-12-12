@@ -16,9 +16,14 @@ def init(mngr : ApiManager):
     app.apiMngr = mngr
     app.run(HOST,PORT,debug=True)
 
+def index():
+    """ 
+    Index API page
+    """
+    return "This is the Train A Croqueta's API web ranking"
 
 @app.route('/api')
-def index():
+def indexapi():
     """ 
     Index API page
     """
@@ -180,3 +185,16 @@ def updateGamedata():
     elif result == (ReturnCodes.UPDATED_SUCCESS):
         return 'Updated successfully',200
 
+@app.route('/api/getranking' , methods=['GET'])
+def getRanking():
+    """
+    Get the list of the Producers 
+    """
+    result = app.apiMngr.getRanking()
+    if result == (ReturnCodes.ERROR):
+        return 'Internal server error',500
+    else: 
+        response = json.dumps([rnk.__dict__ for rnk in result])
+        return response,200
+    
+    
