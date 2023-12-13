@@ -51,7 +51,6 @@ class UserManager:
       elif result == (ReturnCodes.USER_EXISTS):
          returnValue = ReturnCodes.USER_EXISTS
       else: 
-         datiduser = result
-         returnValue = User(datiduser)
+         returnValue = result
       return returnValue
  

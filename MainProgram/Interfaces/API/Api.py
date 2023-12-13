@@ -14,7 +14,9 @@ def init(mngr : ApiManager):
     """
     print("--------- API initializing...")
     app.apiMngr = mngr
+    #app.run(HOST,PORT,debug=True, ssl_context=('cert.pem','key.pem'))
     app.run(HOST,PORT,debug=True)
+
 
 def index():
     """ 

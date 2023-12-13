@@ -41,7 +41,7 @@ class ApiManager:
          newuser = User(None,userDict["username"],userDict["passwd"])
          result = self.usrmngr.loginuser(newuser)
          if result == (ReturnCodes.ERROR):
-            returnValue = ReturnCodes.ERROR
+            returnValue = ReturnCodes.ERROR 
          elif result == (ReturnCodes.NOT_USER):
             returnValue = ReturnCodes.NOT_USER
          elif result == (ReturnCodes.WRONG_PSSWD):
@@ -70,11 +70,12 @@ class ApiManager:
             returnValue = ReturnCodes.USER_EXISTS
          else:
             resultiduser = result
-            resultValuedg = self.createDatagame(result)
+            newuser.idUser = result
+            resultValuedg = self.createDatagame(resultiduser)
             if resultValuedg == (ReturnCodes.ERROR):
                returnValue = ReturnCodes.ERROR
             elif resultValuedg == (ReturnCodes.CREATED):
-               returnValue = resultiduser.__dict__
+               returnValue = newuser.__dict__
       else:
          returnValue = ReturnCodes.MISSING_DATA
 
@@ -172,11 +173,11 @@ class ApiManager:
 
       return returnValue
    
-   def createDatagame(self, idUserDict: User):
+   def createDatagame(self, idUser: int):
       """
       Create datagame base to new users
       """
-      result = self.gmmngr.createGamedata(idUserDict.idUser)
+      result = self.gmmngr.createGamedata(idUser)
       if result == (ReturnCodes.ERROR):
          returnValue = ReturnCodes.ERROR
       else:
@@ -195,4 +196,3 @@ class ApiManager:
          returnValue = result
 
       return returnValue  
-   

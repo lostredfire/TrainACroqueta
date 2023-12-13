@@ -81,7 +81,7 @@ Return Codes:
 
 6. getproducers() --> Object list (idProd,prodName,prodQuantity,img,description,price)
 
-http://trainacroqueta.ignorelist.com:1109/api/getproducers
+http://trainacroqueta.ignorelist.com:1109/api/getproducers   [GET]
 
 Return Codes:
     [200] -> Accepted 
@@ -127,5 +127,14 @@ http://trainacroqueta.ignorelist.com:1109/api/updategamedata	[PUT]
 Return Codes:
     [200] -> Accepted 
     [404] -> Not Found Missing Data
+    [500] -> Internal server error
+    [415] -> Unsopported media type
+
+6. getranking() --> Object list (username,ncroquetas)
+
+http://trainacroqueta.ignorelist.com:1109/api/getranking   [GET]
+
+Return Codes:
+    [200] -> Accepted 
     [500] -> Internal server error
     [415] -> Unsopported media type
