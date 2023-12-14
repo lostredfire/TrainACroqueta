@@ -29,7 +29,7 @@ CREATE TABLE `exercisecroquetas` (
   `idExercise` int(11) NOT NULL AUTO_INCREMENT,
   `qttyCroquetas` int(11) DEFAULT NULL,
   `duration` int(11) DEFAULT NULL,
-  `dateTime` date DEFAULT NULL,
+  `dateTime` datetime DEFAULT NULL,
   PRIMARY KEY (`idExercise`),
   KEY `pkidgame_idx` (`idGame`),
   CONSTRAINT `pkidgame` FOREIGN KEY (`idGame`) REFERENCES `gamedata` (`idGame`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -42,7 +42,7 @@ CREATE TABLE `exercisecroquetas` (
 
 LOCK TABLES `exercisecroquetas` WRITE;
 /*!40000 ALTER TABLE `exercisecroquetas` DISABLE KEYS */;
-INSERT INTO `exercisecroquetas` VALUES (1,1,8,8,NULL),(2,2,300,80,'2020-03-09'),(2,3,NULL,NULL,'2020-03-09');
+INSERT INTO `exercisecroquetas` VALUES (1,1,8,8,NULL),(2,2,300,80,'2020-03-09 00:00:00'),(2,3,NULL,NULL,'2020-03-09 00:00:00');
 /*!40000 ALTER TABLE `exercisecroquetas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -57,7 +57,7 @@ CREATE TABLE `gamedata` (
   `idGame` int(11) NOT NULL AUTO_INCREMENT,
   `idUser` int(11) NOT NULL,
   `nCroquetas` int(11) DEFAULT 0,
-  `lastDay` date DEFAULT NULL,
+  `lastDay` datetime DEFAULT NULL,
   PRIMARY KEY (`idGame`),
   KEY `pkidUser_idx` (`idUser`),
   CONSTRAINT `pkidUser` FOREIGN KEY (`idUser`) REFERENCES `users` (`idUser`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -70,7 +70,7 @@ CREATE TABLE `gamedata` (
 
 LOCK TABLES `gamedata` WRITE;
 /*!40000 ALTER TABLE `gamedata` DISABLE KEYS */;
-INSERT INTO `gamedata` VALUES (1,2,300,'2023-12-03'),(2,3,20,'2021-12-03'),(6,16,400,NULL),(7,24,0,NULL),(8,25,0,NULL);
+INSERT INTO `gamedata` VALUES (1,2,300,'2023-12-03 00:00:00'),(2,3,20,'2021-12-03 00:00:00'),(6,16,400,NULL),(7,24,0,NULL),(8,25,0,NULL);
 /*!40000 ALTER TABLE `gamedata` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -270,4 +270,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-12-14  0:37:37
+-- Dump completed on 2023-12-14 19:23:19
