@@ -73,6 +73,7 @@ public class MainMenuManager : MonoBehaviour
 
      public void settingsOption() {
 
+          toogleImgTitle();
           GameObject settings = Instantiate(panelSettingsPrefabGO, gameObject.transform);
 
      }
