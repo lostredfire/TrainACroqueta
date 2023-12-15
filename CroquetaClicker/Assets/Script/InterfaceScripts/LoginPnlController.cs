@@ -22,6 +22,7 @@ public class LoginPnlController : MonoBehaviour
 
     public void okClicked() {
 
+        MainMenuManager.instance.toogleLoadingAnim();
         if (_loginMode) 
             requestLogin();
         else 
@@ -51,21 +52,30 @@ public class LoginPnlController : MonoBehaviour
 
     private void requestLogin() {
         
-        Debug.Log(txtUsername.text);
-        Debug.Log(txtPasswd.text);
-        UserManager.instance.loginUser(new User(txtUsername.text, txtPasswd.text), showLoginResult);
+        if (txtUsername.text == "" || txtPasswd.text == "") {
+            showLoginResult(412);
+        } else {
+            UserManager.instance.loginUser(new User(txtUsername.text, txtPasswd.text), showLoginResult);
+        }
 
     }
 
     public void showLoginResult(int loginResult) {
 
+        MainMenuManager.instance.toogleLoadingAnim();
         if (loginResult == 200) {
             closeLoginPnl();
         } else if (loginResult == 404) {
-            txtError.text = "Error: Usuario no encontrado";
+            txtError.text = "Error: Usuario no encontrado.";
             errorPnl.SetActive(true);
         } else if (loginResult == 406) {
-            txtError.text = "Error: Contraseña incorrecta";
+            txtError.text = "Error: Contraseña incorrecta.";
+            errorPnl.SetActive(true);
+        } else if (loginResult == 412) {
+            txtError.text = "Es necesario rellenar todos los campos.";
+            errorPnl.SetActive(true);
+        } else if (loginResult == 500) {
+            txtError.text = "Error: Fallo interno del servidor.";
             errorPnl.SetActive(true);
         }
 
@@ -73,7 +83,28 @@ public class LoginPnlController : MonoBehaviour
 
     private void requestSignup() {
 
+        if (txtUsername.text == "" || txtPasswd.text == "" || txtFullName.text == "" || txtEmail.text == "") {
+            showSignupResult(412);
+        } else {
+            UserManager.instance.signupUser(new User(txtUsername.text, txtPasswd.text, txtFullName.text, txtEmail.text), showSignupResult);
+        }
 
+    }
+
+    public void showSignupResult(int signupResult) {
+
+        MainMenuManager.instance.toogleLoadingAnim();
+        if (signupResult == 200) {
+            closeLoginPnl();
+        } else if (signupResult == 404) {
+            txtError.text = "Error: ya existe un usuario con este nombre de usuario.";
+            errorPnl.SetActive(true);
+        } else if (signupResult == 412) {
+            txtError.text = "Es necesario rellenar todos los campos.";
+            errorPnl.SetActive(true);
+        } else if (signupResult == 500) {
+            txtError.text = "Error: Fallo interno del servidor.";
+        }
 
     }
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class ProducerManager {
 
@@ -8,25 +9,117 @@ public class ProducerManager {
     private InGameProducer[] _puntualProducerList;
     private BaseTimeStamp _globalTimeStamp;
     private BonusManager _globalBonusManager;
+    private GameData _gd;
     private long _totalProduction;
+    private bool _prodTypesInitialized;
+    private bool _gameDataInitialized;
+    private bool _initialized;
+    private bool _errorOccured;
 
-    public ProducerManager() {
+    public delegate void ProdMngrInitedCb();
+    private ProdMngrInitedCb prodMngrInitedCb;
 
-        _producerList = new InGameProducer[GameGlobals.PRODUCER_TYPES.Length];
-        _puntualProducerList = new InGameProducer[GameGlobals.PUNTUAL_PRODUCER_TYPES.Length];
-        _globalTimeStamp = new BaseTimeStamp(0);
-        _globalBonusManager = new BonusManager();
-        _totalProduction = -1;
+    /// <summary>
+    /// Producer Manager constructor
+    /// </summary>
+    /// <param name="cb"> The callback needed to notify the GUI that the producerList is ready. </param>
+    public ProducerManager(ProdMngrInitedCb cb) {
 
-        for (int i = 0; i < _producerList.Length; i++) {
-            _producerList[i] = new InGameProducer(GameGlobals.PRODUCER_TYPES[i]);
+        _initialized = false;
+        _prodTypesInitialized = false;
+        _gameDataInitialized = false;
+        _errorOccured = false;
+        prodMngrInitedCb = cb;
+        ApiManager.instance.sendGetProducerList(processReceivedProducerList);
+        ApiManager.instance.sendGetGameData(UserManager.instance.userSignedIn, processReceivedGameData);
+
+    }
+
+    /// <summary>
+    /// Method callback that will be executed when the list of producers is received to process 
+    /// the received json.
+    /// </summary>
+    /// <param name="respCode"> the http code of the response. </param>
+    /// <param name="producerListJson"> the json provided by the api. </param>
+    public void processReceivedProducerList(int respCode, string producerListJson) {
+
+        if (respCode == 200) {
+
+            Producer[] rcvProdList = JsonHelperList.ListFromJson<Producer>(producerListJson);
+            foreach (Producer p in rcvProdList) p.parseImgToIcon();
+
+            _producerList = new InGameProducer[rcvProdList.Length];
+            _puntualProducerList = new InGameProducer[GameGlobals.PUNTUAL_PRODUCER_TYPES.Length];
+            
+            for (int i = 0; i < _producerList.Length; i++) {
+                _producerList[i] = new InGameProducer(rcvProdList[i]);
+            }
+            for (int i = 0; i < _puntualProducerList.Length; i++) {
+                _puntualProducerList[i] = new InGameProducer(GameGlobals.PUNTUAL_PRODUCER_TYPES[i]);
+                _puntualProducerList[i].producerTS.addNProducers(0);
+            }
+
+        } else {
+            _errorOccured = true;
         }
-        for (int i = 0; i < _puntualProducerList.Length; i++) {
-            _puntualProducerList[i] = new InGameProducer(GameGlobals.PUNTUAL_PRODUCER_TYPES[i]);
-            _puntualProducerList[i].producerTS.addNProducers(0);
-        }
-        calculateProduction();
 
+        _prodTypesInitialized = true;
+        finishInitialization();
+
+    }
+
+    /// <summary>
+    /// Method callback that will be executed when the gameData is received to process 
+    /// the received json.
+    /// </summary>
+    public void processReceivedGameData(int respCode, string gameDataJson) {
+
+        if (respCode == 200) {
+
+            _gd = JsonUtility.FromJson<GameData>(gameDataJson);
+            _gd.normalize();
+
+            _globalTimeStamp = new BaseTimeStamp(_gd.nCroquetas, _gd.lastday);
+            _globalBonusManager = new BonusManager(); 
+            _totalProduction = -1; 
+
+        } else {
+            _errorOccured = true;
+        }
+        
+        _gameDataInitialized = true;
+        finishInitialization();
+
+    }
+
+    public void finishInitialization() {
+
+        if (_prodTypesInitialized && _gameDataInitialized) {
+            foreach (GameProducer gp in _gd.gameproducers) {
+                _producerList[gp.idProd].initiailze(new ProducerTimeStamp(gp.qttyCroquetas, _gd.lastday, gp.quantity));
+            }
+            calculateProduction();
+            calculateProduced();
+            _initialized = true;
+            prodMngrInitedCb();
+        }
+
+        if (_errorOccured) {
+            prodMngrInitedCb();
+        }
+
+    }
+
+    public void saveGameData() {
+        
+    }
+
+    /// <summary>
+    /// Gets the number of different types of producers.
+    /// </summary>
+    /// <returns> the number of different types of producers. </returns>
+    public int getProducerTypesCount() {
+        return _producerList.Length;
     }
 
     /// <summary>
@@ -69,7 +162,11 @@ public class ProducerManager {
     /// <returns> The price of buying n producers of the given type. </returns>
     public long calculateProducerPrice(int iProducer, int nProducersToBuy = 1) {
 
-        return (long) Math.Round(_producerList[iProducer].basePrice * Math.Pow(GameGlobals.PRODUCER_PRICE_INCREMENT, nProducersToBuy + _producerList[iProducer].producerTS.nProducers - 1));
+        double basePrice = 0;
+        for (int i = _producerList[iProducer].producerTS.nProducers; i < _producerList[iProducer].producerTS.nProducers + nProducersToBuy; i++) {
+            basePrice += Math.Pow(GameGlobals.PRODUCER_PRICE_INCREMENT, i);
+        }
+        return (long) Math.Round(_producerList[iProducer].price * basePrice);
 
     }
 
@@ -81,7 +178,11 @@ public class ProducerManager {
     /// <returns> The price of selling n producers of the given type. </returns>
     public long calculateProducerSellPrice(int iProducer, int nProducersToSell = 1) {
 
-        return (long) (calculateProducerPrice(iProducer, (nProducersToSell * (-1))) * (1 - GameGlobals.LOOSE_BY_SELL_PRODUCTOR));
+        double basePrice = 0;
+        for (int i = _producerList[iProducer].producerTS.nProducers - nProducersToSell; i < _producerList[iProducer].producerTS.nProducers; i++) {
+            basePrice += Math.Pow(GameGlobals.PRODUCER_PRICE_INCREMENT, i);
+        }
+        return (long) Math.Round(_producerList[iProducer].price * basePrice * (1 - GameGlobals.LOOSE_BY_SELL_PRODUCTOR));
 
     }
 
@@ -98,7 +199,7 @@ public class ProducerManager {
         while (croquetasAvailable >= currentPrice) {
             maxProducersToBuy++;
             croquetasAvailable -= currentPrice;
-            currentPrice = calculateProducerPrice(iProducer, maxProducersToBuy);
+            currentPrice = calculateProducerPrice(iProducer, maxProducersToBuy + 1);
         }
         return maxProducersToBuy;
 
@@ -156,6 +257,18 @@ public class ProducerManager {
     public InGameProducer[] ProducerList {
         get { 
             return _producerList; 
+        }
+    }
+
+    public bool isInitializated {
+        get {
+            return _initialized;
+        }
+    }
+
+    public bool isErrorOcurred {
+        get {
+            return _errorOccured;
         }
     }
 

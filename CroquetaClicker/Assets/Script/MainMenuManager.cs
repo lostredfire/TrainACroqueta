@@ -19,6 +19,7 @@ public class MainMenuManager : MonoBehaviour
      public GameObject imgTitle;
      public Button btnStartGame;
      public TMPro.TextMeshProUGUI txtUserLbl;
+     private GameObject loadingPnl;
 
      public void Awake() {
           if (_instance == null) {
@@ -34,6 +35,12 @@ public class MainMenuManager : MonoBehaviour
                SoundManager.instance.changeVolume(float.Parse(sr.ReadLine()));
                SoundManager.instance.changeEffectsVolume(float.Parse(sr.ReadLine()));
           }
+          loadingPnl = Instantiate(GameGlobals.PANEL_LOADING_PREFAB_GO, null);
+          loadingPnl.SetActive(false);
+     }
+
+     public void toogleLoadingAnim() {
+          loadingPnl.SetActive(!loadingPnl.activeSelf);
      }
 
      public void notifyUserLogged(User u) {

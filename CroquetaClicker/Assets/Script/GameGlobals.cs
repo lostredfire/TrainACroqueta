@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameGlobals : MonoBehaviour {
 
     //variables to display in the inspector.
+    public GameObject panelLoadingPrefabGO;
     public double maxBonusQtty;
     public double producerPriceIncrement;
     public double loose_by_sell_productor;
@@ -12,6 +13,7 @@ public class GameGlobals : MonoBehaviour {
     public int maxCursors;
     public int nCircCursors;
     public int updateTextsEveryNMiliseconds;
+    public int saveEveryNMilis;
     public Producer[] producerTypes;
     public Producer[] puntualProducerTypes;
 
@@ -23,8 +25,10 @@ public class GameGlobals : MonoBehaviour {
     public static int MAX_CURSORS;
     public static int N_CIRC_CURSORS;
     public static int UPDATE_TEXTS_EVERY_N_MILISECONDS;
+    public static int SAVE_EVERY_N_MILIS;
     public static Producer[] PRODUCER_TYPES;
     public static Producer[] PUNTUAL_PRODUCER_TYPES;
+    public static GameObject PANEL_LOADING_PREFAB_GO;
 
     void Awake() {
 
@@ -36,9 +40,11 @@ public class GameGlobals : MonoBehaviour {
         CURSORS_ROTATION_SPEED = cursorsRotationSpeed;
         MAX_CURSORS = maxCursors;
         UPDATE_TEXTS_EVERY_N_MILISECONDS = updateTextsEveryNMiliseconds;
+        SAVE_EVERY_N_MILIS = saveEveryNMilis;
         PRODUCER_TYPES = producerTypes;
         PUNTUAL_PRODUCER_TYPES = puntualProducerTypes;
         N_CIRC_CURSORS = nCircCursors;
+        PANEL_LOADING_PREFAB_GO = panelLoadingPrefabGO;
 
     }
 

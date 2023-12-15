@@ -17,7 +17,6 @@ public class CursorsPanelController : MonoBehaviour {
         nCursorsPerCirc = GameGlobals.MAX_CURSORS / GameGlobals.N_CIRC_CURSORS;
         anglePerCursor = 360 / nCursorsPerCirc;
 
-
     }
 
     void Update() {
@@ -46,6 +45,13 @@ public class CursorsPanelController : MonoBehaviour {
                                                                              (float) ((260 + 50 * (int)(currentCirc)) * Math.Cos((cursorsQtty*anglePerCursor + currentCirc*5) * (Math.PI/180))), 0);
             cursorsQtty++;
         }
+
+    }
+
+    public void delCursor() {
+
+        Destroy(transform.GetChild(transform.childCount - 1).gameObject);
+        cursorsQtty--;
 
     }
 
