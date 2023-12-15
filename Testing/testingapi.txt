@@ -17,7 +17,7 @@ Return Codes:
     [415] -> Unsopported media type
 
 
-2. singup(username,passwd,fullname,email,profileimg) --> idUser
+2. singup(username,passwd,fullname,email,profileimg) --> idUser,username,passwd,fullName,email,profileImg
 
 http://trainacroqueta.ignorelist.com:1109/api/signup	[PUT]
 
