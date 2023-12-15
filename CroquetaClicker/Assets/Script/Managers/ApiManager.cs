@@ -17,7 +17,37 @@ public class ApiManager
 
     public void sendLogin(User u, API.msgReceivedCallback loginCallback) {
 
-        _api.sendPostToApi("login", u.toJsonStr(true), loginCallback);
+        _api.sendPostToApi("login", u.toJsonStr(User.UserToJsonModes.LOGIN_DATA), loginCallback);
+
+    }
+
+    public void sendSignup(User u, API.msgReceivedCallback signupCallback) {
+
+        _api.sendPutToApi("signup", u.toJsonStr(User.UserToJsonModes.SIGNUP_DATA), signupCallback);
+
+    }
+
+    public void sendGetProducerList(API.msgReceivedCallback respCallback) {
+
+        _api.sendGetToApi("getproducers", respCallback);
+
+    }
+
+    public void sendUpdateGameData(GameData gd, API.msgReceivedCallback respCallback) { //puede fallar porque no devuelve nada el put.
+
+        _api.sendPutToApi("updategamedata", gd.toJsonStr(), respCallback);
+
+    }
+
+    public void sendGetGameData(User u, API.msgReceivedCallback respCallback) {
+
+        _api.sendPostToApi("getgamedata", u.toJsonStr(User.UserToJsonModes.ID_USER), respCallback);
+
+    }
+
+    public void sendGetRanking(API.msgReceivedCallback respCallback) {
+
+        _api.sendGetToApi("getranking", respCallback);
 
     }
 

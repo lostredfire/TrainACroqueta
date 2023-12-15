@@ -23,10 +23,10 @@ public class ProducerPanelController : MonoBehaviour {
         _producerIndex = producerIndex;
         _gameManager = gameManager;
         imgProducerComponent.sprite = producer.icon;
-        txtProducerNameComponent.text = producer.name;
+        txtProducerNameComponent.text = producer.prodName;
         txtProducerDescriptionComponent.text = producer.description;
         txtProducerQttyComponent.text = "0";
-        txtProducerPriceComponent.text = producer.basePrice.ToString();
+        txtProducerPriceComponent.text = producer.price.ToString();
         txtBuyQttyComponent.text = "1";
 
     }

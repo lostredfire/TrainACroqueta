@@ -19,6 +19,8 @@ public class SettingsManager : MonoBehaviour
 
    private void closeSettings() {
 
+      if (MainMenuManager.instance != null)
+         MainMenuManager.instance.toogleImgTitle();
       Destroy(gameObject);
 
    }

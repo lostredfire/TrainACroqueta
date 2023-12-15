@@ -7,8 +7,8 @@ public class UserManager
     private static UserManager _instance;
     private bool _isUserSignedIn;
     private User _userSignedIn;
-    public delegate void showLoginResult(int respCode);
-    private showLoginResult showResCallback;
+    public delegate void showOperationResult(int respCode);
+    private showOperationResult showResCallback;
 
     private UserManager() {
 
@@ -20,10 +20,17 @@ public class UserManager
 
     }
 
-    public void loginUser(User u, showLoginResult showResultCallback) {
+    public void loginUser(User u, showOperationResult showResultCallback) {
 
         this.showResCallback = showResultCallback;
         ApiManager.instance.sendLogin(u, processLoginResult);
+
+    }
+
+    public void signupUser(User u, showOperationResult showResultCallback) {
+
+        this.showResCallback = showResultCallback;
+        ApiManager.instance.sendSignup(u, processLoginResult);
 
     }
 

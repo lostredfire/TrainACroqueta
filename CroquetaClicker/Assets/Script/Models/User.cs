@@ -1,9 +1,18 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
+[Serializable]
 public class User {
+
+    public enum UserToJsonModes {
+        LOGIN_DATA,
+        SIGNUP_DATA,
+        ID_USER
+
+    }
+
     public int idUser;
     public string username;
     public string passwd;
@@ -13,6 +22,14 @@ public class User {
 
     public User(int idUser, string username, string passwd, string fullName, string email) {
         this.idUser = idUser;
+        this.username = username;
+        this.passwd = passwd;
+        this.fullName = fullName;
+        this.email = email;
+        //this.profileImg = profileImg;
+    }
+
+    public User(string username, string passwd, string fullName, string email) {
         this.username = username;
         this.passwd = passwd;
         this.fullName = fullName;
@@ -34,13 +51,14 @@ public class User {
         email = aux.email;
     }
 
-    public string toJsonStr(bool onlyLoginData) {
+    public string toJsonStr(UserToJsonModes mode) {
 
         string jsonstr = "{\n";
-        jsonstr += "\"username\":\"" + username + "\",\n";
-        jsonstr += "\"passwd\":\"" + passwd + "\"" + (onlyLoginData ? "\n": ",\n");
-        if (!onlyLoginData) jsonstr += "\"fullname\":\"" + fullName + "\",\n";
-        if (!onlyLoginData) jsonstr += "\"email\":\"" + email + "\",\n";
+        if (mode == UserToJsonModes.ID_USER) jsonstr += "\"idUser\":\"" + idUser + "\"";
+        if (mode == UserToJsonModes.LOGIN_DATA || mode == UserToJsonModes.SIGNUP_DATA) jsonstr += "\"username\":\"" + username + "\",\n";
+        if (mode == UserToJsonModes.LOGIN_DATA || mode == UserToJsonModes.SIGNUP_DATA) jsonstr += "\"passwd\":\"" + passwd + "\"" + (mode == UserToJsonModes.LOGIN_DATA ? "\n": ",\n");
+        if (mode == UserToJsonModes.SIGNUP_DATA) jsonstr += "\"fullname\":\"" + fullName + "\",\n";
+        if (mode == UserToJsonModes.SIGNUP_DATA) jsonstr += "\"email\":\"" + email + "\"\n";
         jsonstr += "}";
         return jsonstr;
 

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -8,66 +9,87 @@ public class GameManager : MonoBehaviour
     //gameObjects
     public TMPro.TextMeshProUGUI nCroquetasTextComponent;
     public TMPro.TextMeshProUGUI nCroquetasPerSecondTextComponent;
-    public TMPro.TextMeshProUGUI tituloMenu;
+    public TMPro.TextMeshProUGUI tituloMenuStore;
+    public TMPro.TextMeshProUGUI tituloMenuInfo;
     public GameObject contentTiendaGO;
+    public GameObject contentRankingGO;
     public GameObject panelProducerPrefabGO;
     public GameObject panelStoreGO;
     public GameObject panelEstadisticasGO;
-    public GameObject panelLogrosGO;
+    public GameObject panelRankingGO;
     public GameObject panelListaProductoresGO;
     public GameObject panelListaBonusGO;
     public GameObject panelBSQttyGO;
     public GameObject panelSettingsPrefabGO;
+    public GameObject panelUserRankingPrefabGO;
+    public Button btnBuyMode;
+    public Button btnSellMode;
+    public Button btnBS1;
+    public Button btnBS10;
+    public Button btnBS100;
+    public Button btnBSmax;
     public RectTransform panelMainRT;
+    private GameObject pnlSettingsGO;
+    private GameObject _loadingPnl;
 
     //other objects and variables
     public CursorsPanelController cursorsPanelController;
     public Animator croquetaAnimator;
     private ProducerManager _producerManager;
     private ProducerPanelController[] _producersPanelsControllers;
-    private GameObject pnlSettingsGO;
+    private RankingPnlController[] _rankingPanelsControllers;
     private int _nMilisSinceLastUpdate;
-    private long _nTotalCroquetas;
+    private int _nMilisSinceLastSave;
+    private long _nTotalCroquetas = 0;
     private bool _buyingMode = true;
     private int _qttyBuySell = 1;
     private bool _continueUpdating = false;
 
     void Awake() {
 
-        DontDestroyOnLoad(gameObject); //falla porque cuando se destruye la escena, otros elementos tambien se destruyen y este game manager sigue intentando acceder a ellos.
-        //hacer la peticion a la api de la lista de tipos de productores
+        DontDestroyOnLoad(gameObject);
 
     }
 
     void Start() {
 
-        //mostrar spinner mientras se recibe la lista de productores y el gameData de la api.
-        //la escena se deshabilita para que el usuario no pueda hacer nada hasta que se termine de recibir toda la info de la api.
-        _producerManager = new ProducerManager();
+        _loadingPnl = Instantiate(GameGlobals.PANEL_LOADING_PREFAB_GO, null);
+        
+        _producerManager = new ProducerManager(notifyProdMngrInitializated);
 
         _nMilisSinceLastUpdate = 0;
-        _nTotalCroquetas = 0; //obtener el numero de croquetas del GameData de la api.
-        _producersPanelsControllers = new ProducerPanelController[GameGlobals.PRODUCER_TYPES.Length]; //mover esto y el for de despues al nuevo metodo.
-
-        for (int i = 0; i < GameGlobals.PRODUCER_TYPES.Length; i++) {
-            GameObject producerPanel = Instantiate(panelProducerPrefabGO, contentTiendaGO.transform);
-            producerPanel.GetComponent<RectTransform>().localPosition = new Vector3(0, (-120 * i) - 60, 0);
-            _producersPanelsControllers[i] = producerPanel.GetComponent<ProducerPanelController>();
-            _producersPanelsControllers[i].setProducer(GameGlobals.PRODUCER_TYPES[i], i, this);
-            _producersPanelsControllers[i].setProducerPrice(_producerManager.calculateProducerPrice(i));
-        }
-
-        _continueUpdating = true;
+        _continueUpdating = false;
 
     }
 
-    //nuevo metodo que se ejecutara cuando se reciba la lista de tipos de productores.
-    //en este metodo se inicializan los _producersPanelsControllers.
-    //este nuevo metodo, hara la peticion del gameData
+    /// <summary>
+    /// Crea los gameObjects que representan a los productores en la tienda, guarda las referencias de sus controladores y 
+    /// actualiza los elementos de la interfaz con los datos de la partida cargada.
+    /// </summary>
+    public void notifyProdMngrInitializated() {
 
-    //nuevo metodo que se ejecutara cuando se reciba el gameData y el gameProducers
-    //este metodo terminara de inicializar todo lo que falte de la escena.
-    //cuando este todo inicializado, eliminara el spinner de la interfaz y dejara que el usuario use la app.
+        if (_producerManager.isInitializated && !_producerManager.isErrorOcurred) {
+            _producersPanelsControllers = new ProducerPanelController[_producerManager.getProducerTypesCount()];
+
+            for (int i = 0; i < _producersPanelsControllers.Length; i++) {
+                GameObject producerPanel = Instantiate(panelProducerPrefabGO, contentTiendaGO.transform);
+                producerPanel.GetComponent<RectTransform>().localPosition = new Vector3(340, (-120 * i) - 60, 0);
+                _producersPanelsControllers[i] = producerPanel.GetComponent<ProducerPanelController>();
+                _producersPanelsControllers[i].setProducer(_producerManager.ProducerList[i], i, this);
+                _producersPanelsControllers[i].setProducerPrice(_producerManager.calculateProducerPrice(i));
+            }
+            
+            updateUIElements();
+            _qttyBuySell = 1;
+            buyingMode = true;
+            _loadingPnl.SetActive(false);
+            _continueUpdating = true;
+            
+        } else {
+            //TODO: exit to main menu
+        }
+
+    }
 
     void FixedUpdate() {
 
@@ -75,19 +97,49 @@ public class GameManager : MonoBehaviour
             return;
         }
 
+        int aux = (int) (Time.fixedDeltaTime * 1000);
         if (_nMilisSinceLastUpdate >= GameGlobals.UPDATE_TEXTS_EVERY_N_MILISECONDS) {
             _nMilisSinceLastUpdate = 0;
             updateUIElements();
         } else {
-            _nMilisSinceLastUpdate += (int) (Time.fixedDeltaTime * 1000);
+            _nMilisSinceLastUpdate += aux;
         }
 
-        //if (_nSecondsSinceLastSave >= GameGlobals.SAVE_EVERY_N_SECONDS) {
-        //    _nSecondsSinceLastSave = 0;
-        //    saveGameData(); //updategameproducer y updategamedata
-        //} else {
-        //    _nSecondsSinceLastSave += Time.fixedDeltaTime;
-        //}
+        if (_nMilisSinceLastSave >= GameGlobals.SAVE_EVERY_N_MILIS) {
+            _nMilisSinceLastSave = 0;
+            _producerManager.saveGameData();
+        } else {
+            _nMilisSinceLastSave += aux;
+        }
+
+    }
+
+    private void activateAllBSBtns() {
+        btnBuyMode.interactable = true;
+        btnSellMode.interactable = true;
+        btnBS1.interactable = true;
+        btnBS10.interactable = true;
+        btnBS100.interactable = true;
+        btnBSmax.interactable = true;
+    }
+
+    private void showCurrentBuySellQttyMode() {
+
+        activateAllBSBtns();
+
+        if (_buyingMode) 
+            btnBuyMode.interactable = false;
+        else 
+            btnSellMode.interactable = false;
+
+        if (_qttyBuySell == 1)
+            btnBS1.interactable = false;
+        else if (_qttyBuySell == 10)
+            btnBS10.interactable = false;
+        else if (_qttyBuySell == 100)
+            btnBS100.interactable = false;
+        else 
+            btnBSmax.interactable = false;
 
     }
 
@@ -96,10 +148,14 @@ public class GameManager : MonoBehaviour
         _qttyBuySell = qtty;
 
         if (_qttyBuySell != -1) {
-            for (int i = 0; i < GameGlobals.PRODUCER_TYPES.Length; i++) {
+            for (int i = 0; i < _producerManager.ProducerList.Length; i++) {
                 _producersPanelsControllers[i].setBuySellQtty(_qttyBuySell);
+                if (buyingMode) _producersPanelsControllers[i].setProducerPrice(_producerManager.calculateProducerPrice(i, qtty));
+                else _producersPanelsControllers[i].setProducerPrice(_producerManager.calculateProducerSellPrice(i, qtty));
             }
         }
+
+        showCurrentBuySellQttyMode();
 
         _nMilisSinceLastUpdate = 0;
         updateUIElements();
@@ -110,25 +166,27 @@ public class GameManager : MonoBehaviour
 
         if (_buyingMode) { // buying mode
             if (_qttyBuySell == -1) { // buying mode max
-                for (int i = 0; i < GameGlobals.PRODUCER_TYPES.Length; i++) {
+                for (int i = 0; i < _producerManager.ProducerList.Length; i++) {
                     int aux = _producerManager.calculateMaxProducersToBuy(i, _nTotalCroquetas);
                     _producersPanelsControllers[i].setCanBuySell(aux > 0);
                     _producersPanelsControllers[i].setBuySellQtty(aux);
+                    _producersPanelsControllers[i].setProducerPrice(_producerManager.calculateProducerPrice(i, aux));
                 }
             } else { // buying mode not max
-                for (int i = 0; i < GameGlobals.PRODUCER_TYPES.Length; i++) {
+                for (int i = 0; i < _producerManager.ProducerList.Length; i++) {
                     _producersPanelsControllers[i].setCanBuySell(_producerManager.calculateMaxProducersToBuy(i, _nTotalCroquetas) >= _qttyBuySell);
                 }
             }
         } else { // selling mode
             if (_qttyBuySell == -1) { // selling mode max
-                for (int i = 0; i < GameGlobals.PRODUCER_TYPES.Length; i++) {
+                for (int i = 0; i < _producerManager.ProducerList.Length; i++) {
                     int aux = _producerManager.calculateMaxProducersToSell(i);
                     _producersPanelsControllers[i].setCanBuySell(aux > 0);
                     _producersPanelsControllers[i].setBuySellQtty(aux);
+                    _producersPanelsControllers[i].setProducerPrice(_producerManager.calculateProducerSellPrice(i, aux));
                 }
             } else { // selling mode not max
-                for (int i = 0; i < GameGlobals.PRODUCER_TYPES.Length; i++) {
+                for (int i = 0; i < _producerManager.ProducerList.Length; i++) {
                     _producersPanelsControllers[i].setCanBuySell(_producerManager.calculateMaxProducersToSell(i) >= _qttyBuySell);
                 }
             }
@@ -172,7 +230,7 @@ public class GameManager : MonoBehaviour
     public void updateProducerPnlInfo(int producerIndex) {
 
         _producersPanelsControllers[producerIndex].setProducerQtty(_producerManager.ProducerList[producerIndex].producerTS.nProducers);
-        _producersPanelsControllers[producerIndex].setProducerPrice(_producerManager.calculateProducerPrice(producerIndex)); 
+        _producersPanelsControllers[producerIndex].setProducerPrice(_producerManager.calculateProducerPrice(producerIndex, _qttyBuySell)); 
     
     }
 
@@ -182,15 +240,18 @@ public class GameManager : MonoBehaviour
     /// <param name="producerIndex"> The index of the producer kind to sell. </param>
     public void sellProducer(int producerIndex) {
 
-        if (_qttyBuySell == -1) {
-            _nTotalCroquetas += _producerManager.sellProducer(producerIndex, _producerManager.calculateMaxProducersToSell(producerIndex));
-        } else {
-            _nTotalCroquetas += _producerManager.sellProducer(producerIndex, _qttyBuySell);
-        }
+        int aux = 0;
+        if (_qttyBuySell == -1)
+            aux = _producerManager.calculateMaxProducersToSell(producerIndex);
+        else
+            aux = _qttyBuySell;
+        _nTotalCroquetas += _producerManager.sellProducer(producerIndex, aux);
 
         updateProducerPnlInfo(producerIndex);
 
-        //TODO: if producerIndex == 1 -> eliminar cursor alrededor de croqueta.
+        if (producerIndex == 0)
+            for (int i = 0; i < _qttyBuySell; i++)
+                cursorsPanelController.delCursor();
 
     }
 
@@ -200,17 +261,19 @@ public class GameManager : MonoBehaviour
     /// <param name="producerIndex"> The index of the producer kind to buy. </param>
     public void buyProducer(int producerIndex) {
 
-        if (_qttyBuySell == -1) {
-            _nTotalCroquetas = _producerManager.buyProducer(producerIndex, _nTotalCroquetas, _producerManager.calculateMaxProducersToBuy(producerIndex, _nTotalCroquetas));
-        } else {
-            _nTotalCroquetas = _producerManager.buyProducer(producerIndex, _nTotalCroquetas, _qttyBuySell);
-        }
-        
+        int aux = 0;
+        if (_qttyBuySell == -1)
+            aux = _producerManager.calculateMaxProducersToBuy(producerIndex, _nTotalCroquetas);
+        else 
+            aux = _qttyBuySell;
+        _nTotalCroquetas = _producerManager.buyProducer(producerIndex, _nTotalCroquetas, aux);
+
         updateProducerPnlInfo(producerIndex);
 
-        if (producerIndex == 0) {
-            cursorsPanelController.addCursor();
-        }
+        if (producerIndex == 0)
+            if (_qttyBuySell != -1)
+                for (int i = 0; i < aux; i++)
+                    cursorsPanelController.addCursor();
 
     }
 
@@ -223,12 +286,24 @@ public class GameManager : MonoBehaviour
 
     }
 
+    public void rankingReceivedCallback(int respCode) {
+
+        _rankingPanelsControllers = new RankingPnlController[RankingManager.instance.rankingItems.Length];
+        for (int i = 0; i < RankingManager.instance.rankingItems.Length; i++) {
+            GameObject rankingPnl = Instantiate(panelUserRankingPrefabGO, contentRankingGO.transform);
+            rankingPnl.GetComponent<RectTransform>().localPosition = new Vector3(340, (-85 * i) - 70, 0);
+            _rankingPanelsControllers[i] = rankingPnl.GetComponent<RankingPnlController>();
+            _rankingPanelsControllers[i].loadData(i + 1, RankingManager.instance.rankingItems[i]);
+        }
+
+    }
+
     public void openProducerList() {
 
         panelListaBonusGO.SetActive(false);
         panelListaProductoresGO.SetActive(true);
         panelBSQttyGO.SetActive(true);
-        tituloMenu.text = "Tienda / Productores";
+        tituloMenuStore.text = "Tienda / Productores";
 
     }
 
@@ -237,7 +312,7 @@ public class GameManager : MonoBehaviour
         panelListaProductoresGO.SetActive(false);
         panelListaBonusGO.SetActive(true);
         panelBSQttyGO.SetActive(false);
-        tituloMenu.text = "Tienda / Bonus";
+        tituloMenuStore.text = "Tienda / Bonus";
 
     }
 
@@ -245,7 +320,7 @@ public class GameManager : MonoBehaviour
 
         panelStoreGO.SetActive(false);
         panelEstadisticasGO.SetActive(false);
-        panelLogrosGO.SetActive(false);
+        panelRankingGO.SetActive(false);
         panelMainRT.offsetMin = new Vector2(300, panelMainRT.offsetMin.y);
         if (pnlSettingsGO != null) {
             Debug.Log("hiding settings menu");
@@ -276,13 +351,18 @@ public class GameManager : MonoBehaviour
 
     }
 
-    public void hideShowLogros() {
+    public void hideShowRanking() {
         
         hideAllMenus();
 
-        if (!panelLogrosGO.activeSelf) {           
-            panelLogrosGO.SetActive(true);
+        if (!panelRankingGO.activeSelf) {           
+            panelRankingGO.SetActive(true);
             panelMainRT.offsetMin = new Vector2(980, panelMainRT.offsetMin.y);
+
+            if (_rankingPanelsControllers == null) {
+                RankingManager.instance.loadRankingData(rankingReceivedCallback);
+            }
+
         }
 
     }

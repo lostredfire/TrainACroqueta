@@ -33,6 +33,15 @@ public class InGameProducer : Producer {
     }
 
     /// <summary>
+    /// Initiailzes the data of this inGameProducer from a saved data.
+    /// </summary>
+    /// <param name="pts"> The saved data. </param>
+    public void initiailze(ProducerTimeStamp pts) {
+        _prodTS = pts;
+        addNProducers(0);
+    }
+
+    /// <summary>
     /// Adds n producers to the producerCount.
     /// </summary>
     /// <param name=nProducersToAdd> The number of producers to add. Defaults to 1. </param>
@@ -45,7 +54,7 @@ public class InGameProducer : Producer {
     /// </summary>
     /// <returns> The production of this kind of producer. </returns>
     public override long calculateProduction() {
-        return (long) Math.Round((baseProduction + _bonusManager.totalBaseAdder) * _prodTS.nProducers * _bonusManager.totalMultiplier);
+        return (long) Math.Round((prodQuantity + _bonusManager.totalBaseAdder) * _prodTS.nProducers * _bonusManager.totalMultiplier);
     }
 
     /// <summary>
@@ -58,7 +67,6 @@ public class InGameProducer : Producer {
 
 
     // Getters and setters
-
     public BonusManager bonusManager {
         get {
             return _bonusManager;

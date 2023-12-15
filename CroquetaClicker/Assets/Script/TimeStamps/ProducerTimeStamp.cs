@@ -22,6 +22,16 @@ public class ProducerTimeStamp : BaseTimeStamp {
     }
 
     /// <summary>
+    /// Construct a ProducerTimeStamp from a saved data.
+    /// </summary>
+    /// <param name="nProduced"></param>
+    /// <param name="timeStamp"></param>
+    /// <param name="nProducers"></param>
+    public ProducerTimeStamp(long nProduced, long timeStamp, int nProducers) : base(nProduced, timeStamp) {
+        _nProducers = nProducers;
+    }
+
+    /// <summary>
     /// Updates the Croquetas produced count and adds N producers to the producers count
     /// </summary>
     /// <param name=nProduced> the number of Croquetas produced until now. </param>

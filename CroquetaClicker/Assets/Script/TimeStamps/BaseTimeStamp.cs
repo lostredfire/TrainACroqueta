@@ -17,6 +17,20 @@ public class BaseTimeStamp {
     /// </summary>
     protected long _timeStamp;
 
+    /// <summary>
+    /// Constructor to build a TimeStamp from a saved data.
+    /// </summary>
+    /// <param name="nProduced"> The number of croquetas produced. </param>
+    /// <param name="timeStamp"> The timeStamp when the data was saved.</param>
+    public BaseTimeStamp(long nProduced, long timeStamp) {
+        _nProduced = nProduced;
+        _timeStamp = timeStamp;
+    }
+
+    /// <summary>
+    /// Constructor to build a new TimeStamp
+    /// </summary>
+    /// <param name="nProduced"></param>
     public BaseTimeStamp(long nProduced) {
         _nProduced = nProduced;
         _timeStamp = DateTimeOffset.Now.ToUnixTimeSeconds();
@@ -33,11 +47,17 @@ public class BaseTimeStamp {
         get {
             return _nProduced;
         } 
+        set {
+            _nProduced = value;
+        }
     }
 
     public long timeStamp {
         get {
             return _timeStamp;
+        }
+        set {
+            _nProduced = value;
         }
     }
 
