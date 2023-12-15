@@ -134,7 +134,7 @@ Return Codes:
     [500] -> Internal server error
     [415] -> Unsopported media type
 
-6. getranking() --> Object list (idUser,username,ncroquetas)
+9. getranking() --> Object list (idUser,username,ncroquetas)
 
 http://trainacroqueta.ignorelist.com:1109/api/getranking   [GET]
 
