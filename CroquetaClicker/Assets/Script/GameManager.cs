@@ -58,6 +58,7 @@ public class GameManager : MonoBehaviour
         _producerManager = new ProducerManager(notifyProdMngrInitializated);
 
         _nMilisSinceLastUpdate = 0;
+        _nMilisSinceLastSave = 0;
         _continueUpdating = false;
 
     }
@@ -106,8 +107,9 @@ public class GameManager : MonoBehaviour
         }
 
         if (_nMilisSinceLastSave >= GameGlobals.SAVE_EVERY_N_MILIS) {
+            Debug.Log("Sending update...");
             _nMilisSinceLastSave = 0;
-            _producerManager.saveGameData();
+            _producerManager.saveGameData(_nTotalCroquetas);
         } else {
             _nMilisSinceLastSave += aux;
         }
@@ -271,9 +273,8 @@ public class GameManager : MonoBehaviour
         updateProducerPnlInfo(producerIndex);
 
         if (producerIndex == 0)
-            if (_qttyBuySell != -1)
-                for (int i = 0; i < aux; i++)
-                    cursorsPanelController.addCursor();
+            for (int i = 0; i < aux; i++)
+                cursorsPanelController.addCursor();
 
     }
 
@@ -323,7 +324,6 @@ public class GameManager : MonoBehaviour
         panelRankingGO.SetActive(false);
         panelMainRT.offsetMin = new Vector2(300, panelMainRT.offsetMin.y);
         if (pnlSettingsGO != null) {
-            Debug.Log("hiding settings menu");
             pnlSettingsGO.GetComponent<SettingsManager>().revertChanges();
         }
 

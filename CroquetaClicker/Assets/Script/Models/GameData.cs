@@ -10,12 +10,15 @@ using UnityEngine;
 public class GameData {
     
     public int idGame;
-    public int nCroquetas;
+    public long nCroquetas;
     public long lastday;
     public GameProducer[] gameproducers;
 
-    public GameData() {
-
+    public GameData(int idGm, long nCroq, long lastd, GameProducer[] gameProd) {
+        this.idGame = idGm;
+        this.nCroquetas = nCroq;
+        this.lastday = lastd;
+        this.gameproducers = gameProd;
     }
 
     /// <summary>

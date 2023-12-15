@@ -110,8 +110,18 @@ public class ProducerManager {
 
     }
 
-    public void saveGameData() {
+    public void saveGameData(long nCroq) {
         
+        GameProducer[] gps = new GameProducer[_producerList.Length];
+        for (int i = 0; i < gps.Length; i++) {
+            gps[i] = new GameProducer(i + 1, _producerList[i].producerTS.nProducers, _producerList[i].calculateProduced());
+        }
+        ApiManager.instance.sendUpdateGameData(new GameData(_gd.idGame, nCroq, DateTimeOffset.Now.ToUnixTimeSeconds(), gps), saveGameDataResultCB);
+
+    }
+
+    public void saveGameDataResultCB(int respCode, string resp) {
+        Debug.Log("Saved: " + respCode);
     }
 
     /// <summary>
@@ -204,6 +214,11 @@ public class ProducerManager {
 
     }
 
+    /// <summary>
+    /// Calculates the number of producers of a determinated type that can be sold.
+    /// </summary>
+    /// <param name="iProducer"> the index of the type of producer. </param>
+    /// <returns> The number of producers that can be sold. </returns>
     public int calculateMaxProducersToSell(int iProducer) {
             
         return _producerList[iProducer].producerTS.nProducers;

@@ -1320,7 +1320,7 @@ MonoBehaviour:
   maxCursors: 160
   nCircCursors: 4
   updateTextsEveryNMiliseconds: 1000
-  saveEveryNMilis: 50000
+  saveEveryNMilis: 15000
   producerTypes: []
   puntualProducerTypes:
   - idProd: 0

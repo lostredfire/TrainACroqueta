@@ -9,10 +9,12 @@ public class GameProducer {
 
     public int idProd;
     public int quantity;
-    public int qttyCroquetas;
+    public long qttyCroquetas;
 
-    public GameProducer() {
-
+    public GameProducer(int id, int qtty, long qttyCroq) {
+        this.idProd = id;
+        this.quantity = qtty;
+        this.qttyCroquetas = qttyCroq;
     }
 
 }
