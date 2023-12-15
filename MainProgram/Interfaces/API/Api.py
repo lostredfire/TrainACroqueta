@@ -149,7 +149,7 @@ def getProducers():
         response = json.dumps([prd.__dict__ for prd in result])
         return response,200
 
-@app.route('/api/getgamedata' , methods=['GET'])
+@app.route('/api/getgamedata' , methods=['POST'])
 def getGamedata():
     """
     Get the info of the game
