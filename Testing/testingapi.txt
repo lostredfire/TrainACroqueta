@@ -90,7 +90,7 @@ Return Codes:
 
 7. getgamedata(idUser) --> idGame,nCroquetas,lastday,gameproducers [Objectlist(idProd,quantity)]
 
-http://trainacroqueta.ignorelist.com:1109/api/getgamedata	[GET]
+http://trainacroqueta.ignorelist.com:1109/api/getgamedata	[POST]
 
 {
     "idUser": 2
