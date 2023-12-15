@@ -151,6 +151,8 @@ class ApiManager:
          if result == (ReturnCodes.ERROR):
             returnValue = ReturnCodes.ERROR
          else:
+            if (result.gameproducer == 0):
+               result.gameproducer = []
             returnValue = result.__dict__
       else:
          returnValue = ReturnCodes.MISSING_DATA

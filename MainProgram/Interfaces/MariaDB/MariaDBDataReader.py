@@ -71,9 +71,9 @@ def readGameProducers(idGame: int, idProd: int = None):
    """
    global dbConnection
    if (idProd != None):
-      sql = "SELECT quantity FROM gameproducer where idGame = " + str(idGame) + " and idProd = "+ str(idProd) +";"
+      sql = "SELECT quantity, qttyCroquetas FROM gameproducer where idGame = " + str(idGame) + " and idProd = "+ str(idProd) +";"
    else: 
-      sql = "SELECT idProd, quantity FROM gameproducer where idGame = " + str(idGame) + " ;"
+      sql = "SELECT idProd, quantity, qttyCroquetas FROM gameproducer where idGame = " + str(idGame) + " ;"
   
    if (dbConnection != None):
       returnValue = dbConnection.executeSqlRead(sql)

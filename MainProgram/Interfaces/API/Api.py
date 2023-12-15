@@ -155,11 +155,11 @@ def getGamedata():
     Get the info of the game
     """
     try:
-        idgame = request.get_json()
+        iduser= request.get_json()
     except:
         return 'Bad request, unsupported media type',415
     
-    result = app.apiMngr.getGamedata(idgame)
+    result = app.apiMngr.getGamedata(iduser)
     if result == (ReturnCodes.ERROR):
         return 'Internal server error',500
     elif result == (ReturnCodes.MISSING_DATA):

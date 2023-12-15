@@ -44,7 +44,8 @@ class ProducerManager:
          for dat in result:
             datidprod = dat[0]
             datquantity = dat[1]
-            dbgameproducer = GameProducer(None,datidprod,datquantity)
+            datqttycroquetas = dat[2]
+            dbgameproducer = GameProducer(None,datidprod,datquantity,datqttycroquetas)
             listgameProducer.append(dbgameproducer.__dict__)
          return listgameProducer
       return returnValue 
@@ -54,8 +55,8 @@ class ProducerManager:
       Get the object Gameproducer and send to DBManager
       """
       for dat in listgameproducer:
-            datgameproducer = GameProducer(dat['idGame'],dat['idProd'],dat['quantity'])
-            result = self.dbmngr.updateGameproducer(datgameproducer.idGame, datgameproducer.idProd, datgameproducer.quantity)
+            datgameproducer = GameProducer(dat['idGame'],dat['idProd'],dat['quantity'],dat['qttyCroquetas'])
+            result = self.dbmngr.updateGameproducer(datgameproducer.idGame, datgameproducer.idProd, datgameproducer.quantity,datgameproducer.qttyCroquetas)
       
       if result == (ReturnCodes.ERROR):
          returnValue = ReturnCodes.ERROR

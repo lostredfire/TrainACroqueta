@@ -98,12 +98,12 @@ def createGameproducer(idGame : int, idProd :int):
       returnValue = ReturnCodes.ERROR
    return returnValue
 
-def updateGameproducer(idGame : int, idProd : int , quantity: int):
+def updateGameproducer(idGame : int, idProd : int , quantity : int, qttyCroquetas : int):
    """
    Create the sentence sql
    """
    global dbConnection
-   sql = "update gameproducer set quantity = "+ str(quantity)+" where idGame = "+str(idGame)+" and idProd = "+str(idProd) +";"
+   sql = "update gameproducer set quantity = "+ str(quantity)+", qttyCroquetas = " + str(qttyCroquetas)+ " where idGame = "+str(idGame)+" and idProd = "+str(idProd) +";"
    if (dbConnection != None):
       returnValue = dbConnection.executeSqlWrite(sql)
    else:

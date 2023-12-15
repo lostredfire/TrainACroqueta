@@ -152,7 +152,7 @@ class DBManager:
          
       return returnValue     
    
-   def updateGameproducer(self,idGame : int ,idProd : int, quantity: int):
+   def updateGameproducer(self,idGame : int ,idProd : int, quantity: int, qttCroquetas : int):
       """
       Test if the game has the producer, if not create a new instance and then update the game producer
       """ 
@@ -162,7 +162,7 @@ class DBManager:
          if (resultcreate == ReturnCodes.ERROR):
             returnValue = ReturnCodes.ERROR
       else:
-         resultrow = MariaDBDataWriter.updateGameproducer(idGame, idProd, quantity)
+         resultrow = MariaDBDataWriter.updateGameproducer(idGame, idProd, quantity, qttyCroquetas)
          if(resultrow == 0):
             returnValue = ReturnCodes.ERROR
          elif(resultrow == 1):
