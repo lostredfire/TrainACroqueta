@@ -198,7 +198,6 @@ public class ProducerManager {
         long currentPrice = calculateProducerPrice(iProducer);
         while (croquetasAvailable >= currentPrice) {
             maxProducersToBuy++;
-            croquetasAvailable -= currentPrice;
             currentPrice = calculateProducerPrice(iProducer, maxProducersToBuy + 1);
         }
         return maxProducersToBuy;
