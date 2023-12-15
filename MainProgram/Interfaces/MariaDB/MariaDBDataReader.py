@@ -13,12 +13,12 @@ def init(dbConn : DBConnect):
    dbConnection = dbConn
 
 
-def readUserPass(username : str):
+def readUserPass(userName : str):
    """
    Create the sentence sql
    """
    global dbConnection
-   sql = "SELECT  idUser, userName, password, fullName, email, profileImg FROM users WHERE userName = '" + username + "';"
+   sql = "SELECT  idUser, userName, password, fullName, email, profileImg FROM users WHERE userName = '" + userName + "';"
    if (dbConnection != None):
       returnValue = dbConnection.executeSqlRead(sql)
    else:
@@ -26,12 +26,12 @@ def readUserPass(username : str):
 
    return returnValue
 
-def readUser(username : str):
+def readUser(userName : str):
    """
    Create the sentence sql
    """
    global dbConnection
-   sql = "SELECT userName FROM users WHERE userName = '" + username + "';"
+   sql = "SELECT userName FROM users WHERE userName = '" + userName + "';"
    if (dbConnection != None):
       returnValue = dbConnection.executeSqlRead(sql)
    else:
@@ -87,7 +87,7 @@ def readRanking():
    Create the sentence sql
    """
    global dbConnection
-   sql = "select usr.userName, gd.nCroquetas from gamedata as gd inner join users as usr on usr.idUser = gd.idUser order by gd.nCroquetas DESC;"
+   sql = "select usr.idUser, usr.userName, gd.nCroquetas from gamedata as gd inner join users as usr on usr.idUser = gd.idUser order by gd.nCroquetas DESC;"
    if (dbConnection != None):
       returnValue = dbConnection.executeSqlRead(sql)
    else:

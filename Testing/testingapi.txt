@@ -40,8 +40,8 @@ Return Codes:
 http://trainacroqueta.ignorelist.com:1109/api/newexercise	[PUT]
 
 {
-    "idGame":"2",
-    "dateTime":"2020-03-09"
+    "idGame":"11",
+    "dateTime":"20200309"
 }
 
 Return Codes:
@@ -55,7 +55,7 @@ Return Codes:
 http://trainacroqueta.ignorelist.com:1109/api/updateexercise	[PUT]
 
 {
-    "idExercise":2,
+    "idExercise":4,
     "qttCroquetas":30
 }
 
@@ -67,8 +67,10 @@ Return Codes:
 
 5. finishexercice(idExercise,qttCroquetas,duration) --> Null
 
+http://trainacroqueta.ignorelist.com:1109/api/finishexercise    [PUT]
+
 {
-    "idExercise":2,
+    "idExercise":4,
     "qttCroquetas":300,
     "duration": 80
 }
@@ -88,12 +90,12 @@ Return Codes:
     [500] -> Internal server error
     [415] -> Unsopported media type
 
-7. getgamedata(idUser) --> idGame,nCroquetas,lastday,gameproducers [Objectlist(idProd,quantity)]
+7. getgamedata(idUser) --> idGame,nCroquetas,lastday,gameproducers [Objectlist(idProd,quantity,qttyCroquetas)]
 
-http://trainacroqueta.ignorelist.com:1109/api/getgamedata	[GET]
+http://trainacroqueta.ignorelist.com:1109/api/getgamedata	[POST]
 
 {
-    "idUser": 2
+    "idUser": 26
 }
 
 Return Codes:
@@ -103,24 +105,26 @@ Return Codes:
     [415] -> Unsopported media type
 
 
-8. updategamedata(idGame, nCroquetas, lastday, gameproducers(idGame,idProd,quantity) ) --> Null
+8. updategamedata(idGame, nCroquetas, lastday, gameproducers(idGame,idProd,quantity,qttyCroquetas) ) --> Null
 
 http://trainacroqueta.ignorelist.com:1109/api/updategamedata	[PUT]
 
 {
-    "idGame": 1,
+    "idGame": 11,
     "nCroquetas": 300,
-    "lastday": "2023-12-03",
+    "lastday": "20231203",
     "gameproducers": [
         {
-            "idGame" : 1,
+            "idGame" : 11,
             "idProd": 1,
-            "quantity": 30	
+            "quantity": 30,
+            "qttyCroquetas": 30	
         },
         {
-            "idGame" : 1,
+            "idGame" : 11,
             "idProd": 2,
-            "quantity": 30	
+            "quantity": 30,
+            "qttyCroquetas": 30		
         }   ]
 }
 

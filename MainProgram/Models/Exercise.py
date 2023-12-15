@@ -14,3 +14,4 @@ class Exercise():
         self.qttCroquetas = qttCroquetas
         self.duration = duration
         self.datetime = datetime
+

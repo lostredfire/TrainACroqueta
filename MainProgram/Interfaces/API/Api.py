@@ -6,7 +6,6 @@ import json
 HOST = '192.168.1.22'
 PORT = 1109
 app = Flask(__name__)
-#apiMngr = None
 
 def init(mngr : ApiManager):
     """ 
@@ -16,13 +15,6 @@ def init(mngr : ApiManager):
     app.apiMngr = mngr
     #app.run(HOST,PORT,debug=True, ssl_context=('cert.pem','key.pem'))
     app.run(HOST,PORT,debug=True)
-
-
-def index():
-    """ 
-    Index API page
-    """
-    return "This is the Train A Croqueta's API web ranking"
 
 @app.route('/api')
 def indexapi():
@@ -44,17 +36,15 @@ def login():
     
     result = app.apiMngr.login(userDict)
     if result == (ReturnCodes.ERROR):
-        return 'Internal server error',500
+        return 'Internal server error', 500
     elif result == (ReturnCodes.NOT_USER):
-        return 'Not user',404
+        return 'Not user', 404
     elif result == (ReturnCodes.WRONG_PSSWD):
-        return 'Wrong password',406
+        return 'Wrong password', 406
     elif result == (ReturnCodes.MISSING_DATA):
-        return 'Missing data',404
+        return 'Missing data', 404
     else:
-        response = json.dumps(result)
-        return response,200
-
+        return json.dumps(result), 200
 
 @app.route('/api/signup', methods=['PUT'])
 def createUser():
@@ -62,21 +52,20 @@ def createUser():
     Sing up API request 
     """
     try:
-        newuserDict = request.get_json()
+        newUserDict = request.get_json()
     except:
-        return 'Bad request, unsupported media type',415
+        return 'Bad request, unsupported media type', 415
     
-    result = app.apiMngr.createUser(newuserDict)
+    result = app.apiMngr.createUser(newUserDict)
     
     if result == (ReturnCodes.ERROR):
-        return 'Internal server error',500
+        return 'Internal server error', 500
     elif result == (ReturnCodes.USER_EXISTS):
-        return 'User already exists',404
+        return 'User already exists', 404
     elif result == (ReturnCodes.MISSING_DATA):
-        return 'Missing data',404
+        return 'Missing data', 404
     else:
-        response = json.dumps(result)
-        return response,200  
+        return json.dumps(result), 200  
 
 @app.route('/api/newexercise' , methods=['PUT'])
 def newExercise():
@@ -84,19 +73,18 @@ def newExercise():
     Create a new Exercise's instance and return the ID of the execice
     """
     try:
-        newexerciseDict = request.get_json()
+        newExerciseDict = request.get_json()
     except:
-        return 'Bad request, unsupported media type',415
+        return 'Bad request, unsupported media type', 415
     
-    result = app.apiMngr.createExercise(newexerciseDict)
+    result = app.apiMngr.createExercise(newExerciseDict)
     
     if result == (ReturnCodes.ERROR):
-        return 'Internal server error',500
+        return 'Internal server error', 500
     elif result == (ReturnCodes.MISSING_DATA):
-        return 'Missing data',404
+        return 'Missing data', 404
     else:
-        response = json.dumps(result)
-        return response,200
+        return json.dumps(result), 200
 
 @app.route('/api/updateexercise' , methods=['PUT'])
 def updateExercise():
@@ -104,18 +92,18 @@ def updateExercise():
     Update Exercise's instance.
     """
     try:
-        updtexerciseDict = request.get_json()
+        updtExerciseDict = request.get_json()
     except:
-        return 'Bad request, unsupported media type',415
+        return 'Bad request, unsupported media type', 415
     
-    result = app.apiMngr.updateExercise(updtexerciseDict)
+    result = app.apiMngr.updateExercise(updtExerciseDict)
     
     if result == (ReturnCodes.ERROR):
-        return 'Internal server error',500
+        return 'Internal server error', 500
     elif result == (ReturnCodes.MISSING_DATA):
-        return 'Missing data',404
+        return 'Missing data', 404
     elif result == (ReturnCodes.UPDATED_SUCCESS):
-        return 'Updated successfully',200
+        return 'Updated successfully', 200
     
 
 @app.route('/api/finishexercise' , methods=['PUT'])
@@ -124,18 +112,17 @@ def finishExercise():
     Finish Exercise's instance.
     """
     try:
-        fnshexerciseDict = request.get_json()
+        fnshExerciseDict = request.get_json()
     except:
-        return 'Bad request, unsupported media type',415
+        return 'Bad request, unsupported media type', 415
     
-    result = app.apiMngr.finishExercise(fnshexerciseDict)
-    
+    result = app.apiMngr.finishExercise(fnshExerciseDict)
     if result == (ReturnCodes.ERROR):
-        return 'Internal server error',500
+        return 'Internal server error', 500
     elif result == (ReturnCodes.MISSING_DATA):
-        return 'Missing data',404
+        return 'Missing data', 404
     elif result == (ReturnCodes.UPDATED_SUCCESS):
-        return 'Updated successfully',200
+        return 'Updated successfully', 200
     
 @app.route('/api/getproducers' , methods=['GET'])
 def getProducers():
@@ -144,10 +131,9 @@ def getProducers():
     """
     result = app.apiMngr.getProducers()
     if result == (ReturnCodes.ERROR):
-        return 'Internal server error',500
+        return 'Internal server error', 500
     else: 
-        response = json.dumps([prd.__dict__ for prd in result])
-        return response,200
+        return json.dumps([prd.__dict__ for prd in result]), 200
 
 @app.route('/api/getgamedata' , methods=['POST'])
 def getGamedata():
@@ -155,18 +141,17 @@ def getGamedata():
     Get the info of the game
     """
     try:
-        iduser= request.get_json()
+        idUser = request.get_json()
     except:
         return 'Bad request, unsupported media type',415
     
-    result = app.apiMngr.getGamedata(iduser)
+    result = app.apiMngr.getGamedata(idUser)
     if result == (ReturnCodes.ERROR):
-        return 'Internal server error',500
+        return 'Internal server error', 500
     elif result == (ReturnCodes.MISSING_DATA):
-        return 'Missing data',404
+        return 'Missing data', 404
     else:
-        response = json.dumps(result)
-        return response,200
+        return json.dumps(result), 200
 
 @app.route('/api/updategamedata' , methods=['PUT'])
 def updateGamedata():
@@ -174,18 +159,17 @@ def updateGamedata():
     Update Game information.
     """
     try:
-        savegamedata = request.get_json()
+        saveGameData = request.get_json()
     except:
-        return 'Bad request, unsupported media type',415
+        return 'Bad request, unsupported media type', 415
     
-    result = app.apiMngr.updateGamedata(savegamedata)
-    
+    result = app.apiMngr.updateGamedata(saveGameData)
     if result == (ReturnCodes.ERROR):
-        return 'Internal server error',500
+        return 'Internal server error', 500
     elif result == (ReturnCodes.MISSING_DATA):
-        return 'Missing data',404
+        return 'Missing data', 404
     elif result == (ReturnCodes.UPDATED_SUCCESS):
-        return 'Updated successfully',200
+        return 'Updated successfully', 200
 
 @app.route('/api/getranking' , methods=['GET'])
 def getRanking():
@@ -194,9 +178,8 @@ def getRanking():
     """
     result = app.apiMngr.getRanking()
     if result == (ReturnCodes.ERROR):
-        return 'Internal server error',500
+        return 'Internal server error', 500
     else: 
-        response = json.dumps([rnk.__dict__ for rnk in result])
-        return response,200
+        return json.dumps([rnk.__dict__ for rnk in result]), 200
     
     

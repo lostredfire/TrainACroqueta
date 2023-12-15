@@ -1,4 +1,5 @@
 import Interfaces.API.Api as Api
+
 from Controllers.UserManager import UserManager
 from Controllers.ExerciseManager import ExerciseManager
 from Controllers.ProducerManager import ProducerManager
@@ -8,29 +9,28 @@ from Controllers.RankingManager import RankingManager
 from Models.User import User
 from Models.Exercise import Exercise
 from Models.GameData import Gamedata
-from Models.GameProducer import GameProducer
 from Models.Constants import ReturnCodes
 
 
 class ApiManager:
 
-   usrmngr = None
-   excmngr = None
-   prdmngr = None
-   gamemngr = None    
-   rnkmngr = None
+   usrMngr = None
+   excMngr = None
+   prdMngr = None
+   gameMngr = None    
+   rnkMngr = None
 
-   def __init__(self, usermanager: UserManager, exercisemanager: ExerciseManager, producermanager: ProducerManager, gamemanager : GameManager, rankingmanager : RankingManager):
+   def __init__(self, userManager: UserManager, exerciseManager: ExerciseManager, producerManager: ProducerManager, gameManager : GameManager, rankingManager : RankingManager):
       """
       Inicialize API and managers
       """
       print("--------- API Manager initializing...")
       # Initialize the API Server
-      self.usrmngr = usermanager
-      self.excmngr = exercisemanager
-      self.prdmngr = producermanager
-      self.gmmngr = gamemanager
-      self.rnkmngr = rankingmanager
+      self.usrMngr = userManager
+      self.excMngr = exerciseManager
+      self.prdMngr = producerManager
+      self.gameMngr = gameManager
+      self.rnkMngr = rankingManager
       Api.init(self)
 
    def login(self, userDict : dict):
@@ -38,8 +38,8 @@ class ApiManager:
       Check if the dict has the right keys and create the object User with this values. 
       """
       if ( len(userDict) == 2 ) and ( "username" in userDict ) and ( "passwd" in userDict ) :
-         newuser = User(None,userDict["username"],userDict["passwd"])
-         result = self.usrmngr.loginuser(newuser)
+         newUser = User(None,userDict["username"],userDict["passwd"])
+         result = self.usrMngr.loginuser(newUser)
          if result == (ReturnCodes.ERROR):
             returnValue = ReturnCodes.ERROR 
          elif result == (ReturnCodes.NOT_USER):
@@ -53,29 +53,29 @@ class ApiManager:
 
       return returnValue
 
-   def createUser(self, newuserDict : dict):
+   def createUser(self, newUserDict : dict):
       """
       Check if the dict has the right keys and create the object User with this values. 
       """
-      if ( len(newuserDict) == 4 ) or ( len(newuserDict) == 5 ):
-         if ( len(newuserDict) == 4):
-            newuser = User(None,newuserDict["username"],newuserDict["passwd"],newuserDict["fullname"],newuserDict["email"])
+      if ( len(newUserDict) == 4 ) or ( len(newUserDict) == 5 ):
+         if ( len(newUserDict) == 4):
+            newUser = User(None,newUserDict["username"],newUserDict["passwd"],newUserDict["fullname"],newUserDict["email"])
          else: 
-            newuser = User(None,newuserDict["username"],newuserDict["passwd"],newuserDict["fullname"],newuserDict["email"],newuserDict["profileimg"])
+            newUser = User(None,newUserDict["username"],newUserDict["passwd"],newUserDict["fullname"],newUserDict["email"],newUserDict["profileimg"])
          
-         result = self.usrmngr.createuser(newuser)
+         result = self.usrMngr.createuser(newUser)
          if result == (ReturnCodes.ERROR):
             returnValue = ReturnCodes.ERROR
          elif result == (ReturnCodes.USER_EXISTS):
             returnValue = ReturnCodes.USER_EXISTS
          else:
-            resultiduser = result
-            newuser.idUser = result
-            resultValuedg = self.createDatagame(resultiduser)
+            resultIdUser = result
+            newUser.idUser = result
+            resultValuedg = self.createDatagame(resultIdUser)
             if resultValuedg == (ReturnCodes.ERROR):
                returnValue = ReturnCodes.ERROR
             elif resultValuedg == (ReturnCodes.CREATED):
-               returnValue = newuser.__dict__
+               returnValue = newUser.__dict__
       else:
          returnValue = ReturnCodes.MISSING_DATA
 
@@ -87,8 +87,8 @@ class ApiManager:
       Check if the dict has the right keys and create the object Exercise with this values. 
       """
       if ( len(exerciseDict) == 2 ) and ( "idGame" in exerciseDict ) and ( "dateTime" in exerciseDict ) :
-         newexercise = Exercise(exerciseDict["idGame"],None,None,None,exerciseDict["dateTime"])
-         result = self.excmngr.createExercise(newexercise)
+         newExercise = Exercise(exerciseDict["idGame"],None,None,None,exerciseDict["dateTime"])
+         result = self.excMngr.createExercise(newExercise)
          if result == (ReturnCodes.ERROR):
             returnValue = ReturnCodes.ERROR
          else:
@@ -103,8 +103,8 @@ class ApiManager:
       Check if the dict has the right keys and create the object Exercise with this values. 
       """
       if ( len(exerciseDict) == 2 ) and ( "idExercise" in exerciseDict ) and ( "qttCroquetas" in exerciseDict ) :
-         uptexercise = Exercise(None,exerciseDict["idExercise"],exerciseDict["qttCroquetas"])
-         result = self.excmngr.updateExercise(uptexercise)
+         uptExercise = Exercise(None,exerciseDict["idExercise"],exerciseDict["qttCroquetas"])
+         result = self.excMngr.updateExercise(uptExercise)
          if result == (ReturnCodes.ERROR):
             returnValue = ReturnCodes.ERROR
          elif result == (ReturnCodes.UPDATED_SUCCESS):
@@ -119,8 +119,8 @@ class ApiManager:
       Check if the dict has the right keys and create the object Exercise with this values. 
       """
       if ( len(exerciseDict) == 3 ) and ( "idExercise" in exerciseDict ) and ( "qttCroquetas" in exerciseDict ) and ( "duration" in exerciseDict ) :
-         fnshexercise = Exercise(None,exerciseDict["idExercise"],exerciseDict["qttCroquetas"],exerciseDict["duration"])
-         result = self.excmngr.finishExercise(fnshexercise)
+         fnshExercise = Exercise(None,exerciseDict["idExercise"],exerciseDict["qttCroquetas"],exerciseDict["duration"])
+         result = self.excMngr.finishExercise(fnshExercise)
          if result == (ReturnCodes.ERROR):
             returnValue = ReturnCodes.ERROR
          elif result == (ReturnCodes.UPDATED_SUCCESS):
@@ -134,7 +134,7 @@ class ApiManager:
       """
       Send the resquest to ProducerManager 
       """
-      result = self.prdmngr.getProducers()
+      result = self.prdMngr.getProducers()
       if result == (ReturnCodes.ERROR):
          returnValue = ReturnCodes.ERROR
       else:
@@ -142,12 +142,12 @@ class ApiManager:
 
       return returnValue   
    
-   def getGamedata(self,gamedataDict: dict):
+   def getGamedata(self,gameDataDict: dict):
       """
       Send the resquest to GameManager 
       """
-      if ( len(gamedataDict) == 1 ) and ( "idUser" in gamedataDict ):
-         result = self.gmmngr.getGamedata(gamedataDict["idUser"])
+      if ( len(gameDataDict) == 1 ) and ( "idUser" in gameDataDict ):
+         result = self.gameMngr.getGamedata(gameDataDict["idUser"])
          if result == (ReturnCodes.ERROR):
             returnValue = ReturnCodes.ERROR
          else:
@@ -158,14 +158,14 @@ class ApiManager:
          returnValue = ReturnCodes.MISSING_DATA
       return returnValue   
    
-   def updateGamedata(self, gamedataDict : dict):
+   def updateGamedata(self, gameDataDict : dict):
       """
       Check if the dict has the right keys and create the object Gamedata with this values. 
       """
-      if ( len(gamedataDict) == 4 ) and ( "idGame" in gamedataDict ) and ( "nCroquetas" in gamedataDict ) and ( "lastday" in gamedataDict ) and ("gameproducers" in gamedataDict):
-         uptgamedata = Gamedata(gamedataDict["idGame"],None,gamedataDict["nCroquetas"],gamedataDict["lastday"])
-         result = self.gmmngr.updateGamedata(uptgamedata)
-         result = self.prdmngr.updateGameproducer(gamedataDict["gameproducers"])
+      if ( len(gameDataDict) == 4 ) and ( "idGame" in gameDataDict ) and ( "nCroquetas" in gameDataDict ) and ( "lastday" in gameDataDict ) and ("gameproducers" in gameDataDict):
+         uptGameData = Gamedata(gameDataDict["idGame"],None,gameDataDict["nCroquetas"],gameDataDict["lastday"])
+         result = self.gameMngr.updateGamedata(uptGameData)
+         result = self.prdMngr.updateGameproducer(gameDataDict["gameproducers"])
          if result == (ReturnCodes.ERROR):
             returnValue = ReturnCodes.ERROR
          elif result == (ReturnCodes.UPDATED_SUCCESS):
@@ -179,7 +179,7 @@ class ApiManager:
       """
       Create datagame base to new users
       """
-      result = self.gmmngr.createGamedata(idUser)
+      result = self.gameMngr.createGamedata(idUser)
       if result == (ReturnCodes.ERROR):
          returnValue = ReturnCodes.ERROR
       else:
@@ -191,7 +191,7 @@ class ApiManager:
       """
       Send the resquest to RankingManager
       """
-      result = self.rnkmngr.getRanking()
+      result = self.rnkMngr.getRanking()
       if result == (ReturnCodes.ERROR):
          returnValue = ReturnCodes.ERROR
       else:

@@ -16,3 +16,4 @@ class Gamedata():
         self.nCroquetas = nCroquetas
         self.lastday = lastday
         self.gameproducer = gameproducer
+        

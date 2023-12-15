@@ -1,4 +1,5 @@
 import mariadb
+from threading import Lock
 
 # Globar variables with configurations of database
 HOST = '192.168.1.22'
@@ -9,50 +10,58 @@ DB = 'trainacroquetadb'
 
 class DBConnect():
 
-   dbconection = None
+   dbConection = None
 
    def __init__(self):
       """
       Configurate the connector and connect to MariaDB
       """
+      self.lock = Lock()
       print("--------- MariaDBConnector initializing...")
       try:
-         self.dbconection = mariadb.connect(
+         self.dbConection = mariadb.connect(
             user = USER, 
-            password= PASSWD,
-            host= HOST,
-            port= PORT,
-            database= DB
+            password = PASSWD,
+            host = HOST,
+            port = PORT,
+            database = DB
          )
       except mariadb.Error as e:
          return("Error")
       
-      self.dbcursor = self.dbconection.cursor()
+      self.dbCursor = self.dbConection.cursor()
 
    def executeSqlRead(self, sql):
       """
       Get a sql sentence and execute, return the result
       """
-      self.dbcursor.execute(sql)
-      self.dbconection.commit()
-      return self.dbcursor.fetchall()
+      self.lock.acquire()
+      self.dbCursor.execute(sql)
+      self.dbConection.commit()
+      self.lock.release()
+      return self.dbCursor.fetchall()
+   
    
    def executeSqlWrite(self, sql):
       """
       Get a sql sentence and execute, return the result
       """
-      self.dbcursor.execute(sql)
-      rows = self.dbcursor.rowcount
-      self.dbconection.commit()
+      self.lock.acquire()
+      self.dbCursor.execute(sql)
+      rows = self.dbCursor.rowcount
+      self.dbConection.commit()
+      self.lock.release()
       return rows
    
    def executeSqlWriteRead(self, sql):
       """
       Get a sql sentence and execute, return the result
       """
-      self.dbcursor.execute(sql)
-      rowid = self.dbcursor.lastrowid
-      self.dbconection.commit()
-      return rowid
+      self.lock.acquire()
+      self.dbCursor.execute(sql)
+      rowId = self.dbCursor.lastrowid
+      self.dbConection.commit()
+      self.lock.release()
+      return rowId
 
       

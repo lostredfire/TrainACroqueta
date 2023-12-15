@@ -4,26 +4,27 @@ from Models.Constants import ReturnCodes
 
 class RankingManager:
 
-   dbmngr = None
+   dbMngr = None
 
-   def __init__(self,dbmanager: DBManager ):
+   def __init__(self, dbManager: DBManager ):
       print("--------- Ranking Manager initializing...")
-      self.dbmngr = dbmanager
+      self.dbMngr = dbManager
 
    def getRanking(self):
       """
       Send the request to DBManager and get the result 
       """
       listRanking = []
-      result = self.dbmngr.getRanking()
+      result = self.dbMngr.getRanking()
       if result == (ReturnCodes.ERROR):
          returnValue = ReturnCodes.ERROR
       else: 
          for dat in result:
-            datusername = dat[0]
-            datncroquetas = dat[1]
-            dbranking= Ranking(datusername,datncroquetas)
-            listRanking.append(dbranking)
+            datidUser = dat[0]
+            datUsername = dat[1]
+            datNCroquetas = dat[2]
+            dbRanking= Ranking(datidUser,datUsername, datNCroquetas)
+            listRanking.append(dbRanking)
          return listRanking
       return returnValue 
    

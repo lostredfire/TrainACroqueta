@@ -152,13 +152,13 @@ class DBManager:
          
       return returnValue     
    
-   def updateGameproducer(self,idGame : int ,idProd : int, quantity: int, qttCroquetas : int):
+   def updateGameproducer(self,idGame : int ,idProd : int, quantity: int, qttyCroquetas : int):
       """
       Test if the game has the producer, if not create a new instance and then update the game producer
       """ 
       exitsprod = MariaDBDataReader.readGameProducers(idGame, idProd)
       if((len(exitsprod)) == 0):
-         resultcreate = self.createGameproducer(idGame,idProd)
+         resultcreate = MariaDBDataWriter.createGameproducer(idGame,idProd)
          if (resultcreate == ReturnCodes.ERROR):
             returnValue = ReturnCodes.ERROR
       else:

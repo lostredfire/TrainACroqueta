@@ -4,17 +4,17 @@ from Models.Constants import ReturnCodes
 
 class ExerciseManager:
 
-   dbmngr = None
+   dbMngr = None
 
-   def __init__(self,dbmanager: DBManager ):
+   def __init__(self,dbManager: DBManager ):
       print("--------- Exercise Manager initializing...")
-      self.dbmngr = dbmanager
+      self.dbMngr = dbManager
 
-   def createExercise(self, newexercise: Exercise):
+   def createExercise(self, newExercise: Exercise):
       """
       Get the object Exercise and send to DBManager
       """
-      result = self.dbmngr.createExercise(newexercise.idGame,newexercise.datetime )
+      result = self.dbMngr.createExercise(newExercise.idGame,newExercise.datetime )
       if result == (ReturnCodes.ERROR):
          returnValue = ReturnCodes.ERROR
       else: 
@@ -22,11 +22,11 @@ class ExerciseManager:
          returnValue = dbExercise
       return returnValue 
    
-   def updateExercise(self, newexercise: Exercise):
+   def updateExercise(self, newExercise: Exercise):
       """
       Get the object Exercise and send to DBManager
       """
-      result = self.dbmngr.updateExercise(newexercise.idExercise,newexercise.qttCroquetas )
+      result = self.dbMngr.updateExercise(newExercise.idExercise,newExercise.qttCroquetas )
       if result == (ReturnCodes.ERROR):
          returnValue = ReturnCodes.ERROR
       elif result == (ReturnCodes.UPDATED_SUCCESS):
@@ -34,11 +34,11 @@ class ExerciseManager:
 
       return returnValue 
    
-   def finishExercise(self, newexercise: Exercise):
+   def finishExercise(self, newExercise: Exercise):
       """
       Get the object Exercise and send to DBManager
       """
-      result = self.dbmngr.finishExercise(newexercise.idExercise,newexercise.qttCroquetas,newexercise.duration)
+      result = self.dbMngr.finishExercise(newExercise.idExercise,newExercise.qttCroquetas,newExercise.duration)
       if result == (ReturnCodes.ERROR):
          returnValue = ReturnCodes.ERROR
       elif result == (ReturnCodes.UPDATED_SUCCESS):

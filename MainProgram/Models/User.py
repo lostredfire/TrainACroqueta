@@ -1,3 +1,4 @@
+
 class User():
     """ User class to manage users information """
 

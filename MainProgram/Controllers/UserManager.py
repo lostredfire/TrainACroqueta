@@ -4,47 +4,47 @@ from Models.Constants import ReturnCodes
 
 class UserManager:
 
-   dbmngr = None
+   dbMngr = None
 
-   def __init__(self, dbmanager: DBManager  ):
+   def __init__(self, dbManager: DBManager  ):
       """
       Inicialize UserManager, get DBManager
       """
       print("--------- User Manager initializing...")
-      self.dbmngr = dbmanager
+      self.dbMngr = dbManager
 
-   def loginuser(self, newuser: User):
+   def loginuser(self, newUser: User):
       """
       Get the object User and send to DBManager
       """
-      result = self.dbmngr.readUser(newuser.username)
+      result = self.dbMngr.readUser(newUser.username)
       if result == (ReturnCodes.ERROR):
          returnValue = ReturnCodes.ERROR
       elif result == (ReturnCodes.NOT_USER):
          returnValue = ReturnCodes.NOT_USER
       else: 
          for dat in result:
-            datid = dat[0]
-            datname = dat[1]
-            datpass = dat[2]
-            datfullname = dat[3]
-            datemail = dat[4]
-            datimg = dat[5]
-         dbUser = User(datid,datname,datpass,datfullname,datemail,datimg)
-         if (dbUser.passwd == newuser.passwd):
+            datId = dat[0]
+            datName = dat[1]
+            datPass = dat[2]
+            datFullName = dat[3]
+            datEmail = dat[4]
+            datImg = dat[5]
+         dbUser = User(datId, datName, datPass, datFullName, datEmail, datImg)
+         if (dbUser.passwd == newUser.passwd):
             returnValue = dbUser
          else:
             returnValue = ReturnCodes.WRONG_PSSWD
       return returnValue  
    
-   def createuser(self, newuser: User):
+   def createuser(self, newUser: User):
       """
       Get the object User and send to DBManager
       """
-      if (newuser.profileImg):
-         result = self.dbmngr.createUser(newuser.username,newuser.passwd,newuser.fullName,newuser.email,newuser.profileImg)
+      if (newUser.profileImg):
+         result = self.dbMngr.createUser(newUser.username, newUser.passwd, newUser.fullName, newUser.email, newUser.profileImg)
       else:
-         result = self.dbmngr.createUser(newuser.username,newuser.passwd,newuser.fullName,newuser.email)
+         result = self.dbMngr.createUser(newUser.username, newUser.passwd, newUser.fullName, newUser.email)
       
       if result == (ReturnCodes.ERROR):
          returnValue = ReturnCodes.ERROR
